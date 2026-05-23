@@ -1,0 +1,404 @@
+/* Reset & Variabel Megah */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none; 
+}
+
+:root {
+    --bg-color: #060608;
+    --text-color: #f1f1f3;
+    --accent-color: #d4af37; /* Emas Luxury */
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Custom Cursor Smooth */
+.custom-cursor {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--accent-color);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+.custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Background Ambient Glow */
+.bg-glow {
+    position: fixed;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
+    top: -20%;
+    left: -10%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Navigasi */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 30px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.nav-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin-left: 40px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    transition: opacity 0.3s, color 0.3s;
+}
+
+.nav-links a:hover {
+    opacity: 1;
+    color: var(--accent-color);
+}
+
+.logo {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--text-color);
+}
+
+/* Hero Section dengan Background Foto Nanda Putra Berbakat */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    padding: 0 5%;
+    overflow: hidden;
+}
+
+.hero-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%; /* Untuk parallax scroll */
+    background-image: url('photo_6075365204976931404_w.jpg'); /* Foto Pake Udeng */
+    background-size: cover;
+    background-position: center 20%;
+    filter: grayscale(80%) brightness(35%);
+    z-index: -2;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--bg-color));
+    z-index: -1;
+}
+
+.hero-title-wrapper {
+    overflow: hidden;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: 11vw;
+    line-height: 0.85;
+    font-weight: 700;
+    letter-spacing: -2px;
+    will-change: transform;
+}
+
+.hero-title.outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+}
+
+.hero-subtitle {
+    margin-top: 40px;
+    font-size: 1rem;
+    opacity: 0.7;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    max-width: 700px;
+    line-height: 1.6;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.3;
+    animation: bounce 2.5s infinite;
+}
+
+/* Work Section Parallax */
+.work-section, .random-section {
+    padding: 120px 10%;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    margin-bottom: 100px;
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
+.project-container {
+    display: flex;
+    flex-direction: column;
+    gap: 180px;
+}
+
+.project-card {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    width: 100%;
+}
+
+.project-card:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.project-img-wrapper {
+    width: 55%;
+    height: 550px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    background-color: #111;
+}
+
+.project-img {
+    width: 100%;
+    height: 130%; 
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) contrast(1.1);
+    transition: filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Injeksi File Gambar Asli */
+.img-it { background-image: url('photo_6075365204976931405_w.jpg'); } /* Foto Laptop UTS */
+.img-mekanik { background-image: url('photo_6075365204976931401_w.jpg'); } /* Foto Bongkar Gardan */
+.img-kucing { background-image: url('photo_6075365204976931403_w.jpg'); } /* Kucing */
+
+.project-card:hover .project-img, .random-container:hover .img-kucing {
+    filter: grayscale(0%) contrast(1);
+}
+
+.project-info {
+    width: 45%;
+}
+
+.project-info span {
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.project-info h3 {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+.project-desc {
+    font-size: 0.95rem;
+    color: #888;
+    line-height: 1.7;
+}
+
+/* Interactive Skills Section */
+.skills-section {
+    padding: 100px 15%;
+    background-color: rgba(255, 255, 255, 0.01);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.skill-node {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: border-color 0.3s;
+}
+
+.skill-node h4 {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: #aaa;
+}
+
+.bar-container {
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.bar {
+    position: absolute;
+    height: 100%;
+    width: 0%; 
+    background-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+#dynamic-skill-desc {
+    text-align: center;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--accent-color);
+    opacity: 0.6;
+    height: 20px;
+}
+
+/* Random Section Style */
+.random-container {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 40px;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.random-img-wrapper {
+    width: 40%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.random-text {
+    width: 60%;
+}
+
+.random-text h3 {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+.random-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+    color: #ccc;
+}
+
+/* About Section Sinematik (Layout Belah Dua dengan Foto Santai Nanda) */
+.about-section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 10%;
+}
+
+.about-layout {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    width: 100%;
+}
+
+.about-profile-wrapper {
+    width: 35%;
+    height: 500px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.about-img {
+    width: 100%;
+    height: 100%;
+    background-image: url('photo_6075365204976931402_w\ \(2\).jpg'); /* Foto kacamata hitam */
+    background-size: cover;
+    background-position: center;
+}
+
+.about-content {
+    width: 65%;
+    text-align: left;
+}
+
+.about-content h2 {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    line-height: 1.3;
+    font-weight: 400;
+    color: #e5e5e7;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Responsif Mobile */
+@media (max-width: 968px) {
+    .project-card, .project-card:nth-child(even), .random-container, .about-layout {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .project-img-wrapper, .project-info, .random-img-wrapper, .random-text, .about-profile-wrapper, .about-content {
+        width: 100%;
+    }
+    .project-img-wrapper, .random-img-wrapper, .about-profile-wrapper { height: 350px; }
+    .hero-title { font-size: 16vw; }
+    .about-content h2 { font-size: 2rem; }
+    .skill-node { grid-template-columns: 1fr; gap: 15px; }
+}

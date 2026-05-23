@@ -1,0 +1,2 @@
+Halo, ini adalah pesan otomatis yang diketik menggunakan Python.
+Program ini bisa men
