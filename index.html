@@ -14,59 +14,86 @@
 
   <style>
     :root {
-  /* === BRAND COLORS === */
-  --primary: #7c3aed;
-  --primary-hover: #6d28d9;
-  --primary-light: #a78bfa;
+  /* === 🎨 BRAND COLORS === */
+  --primary: #7c3aed;        /* Violet utama */
+  --primary-hover: #6d28d9;  /* Saat di-hover (lebih gelap) */
+  --primary-active: #5b21b6; /* Saat di-klik */
+  --primary-light: #a78bfa;  /* Violet terang untuk teks/ikon */
+  --primary-alpha: rgba(124, 58, 237, 0.15); /* Background transparan untuk badge/tag */
+  
+  --accent: #06b6d4;         /* Cyan sebagai warna aksen pemanis */
+  --accent-hover: #0891b2;
 
-  /* === GRADIENTS === */
-  --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 45%, #06b6d4 100%);
-  --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  --danger-gradient:  linear-gradient(135deg, #ef4444 0%, #be123c 100%);
+  /* === ✨ GRADIENTS === */
+  --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #06b6d4 100%);
+  --gradient-glow: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%); /* Untuk teks atau efek border */
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-danger:  linear-gradient(135deg, #ef4444 0%, #be123c 100%);
 
-  /* === STATUS === */
+  /* === 🚦 STATUS & SEMANTIC === */
   --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
   --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
   --warning: #f59e0b;
-  --info: #06b6d4;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
 
-  /* === BACKGROUNDS === */
-  --bg-main: #020617; /* Background utama */
-  --bg-surface: #0f172a; /* Card padat tanpa glass */
-  --bg-elevated: #1e293b; /* Dropdown / Modal padat */
+  /* === 🌌 BACKGROUNDS (DARK THEME) === */
+  --bg-main: #020617;        /* Background kanvas utama paling gelap */
+  --bg-surface: #0f172a;     /* Card padat standar */
+  --bg-elevated: #1e293b;    /* Modal, Dropdown, Navigasi melayang */
+  --bg-highlight: #334155;   /* Efek hover pada elemen solid */
 
-  /* === TEXT COLORS (BARU) === */
-  --text-primary: #f8fafc; /* Judul & teks utama */
-  --text-secondary: #94a3b8; /* Subjudul & paragraf pendukung */
-  --text-muted: #64748b; /* Placeholder & teks kecil */
-  --text-inverse: #0f172a; /* Teks di atas elemen berwarna terang/primary */
+  /* === 📝 TYPOGRAPHY & TEXT === */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace; /* Untuk kode/angka */
+  
+  --text-display: #ffffff;   /* Judul besar (Hero/H1) agar sangat mencolok */
+  --text-primary: #f8fafc;   /* Teks utama (H2-H6, Body) */
+  --text-secondary: #94a3b8; /* Subjudul, deskripsi, paragraf pendukung */
+  --text-muted: #64748b;     /* Placeholder, teks kecil, disable state */
+  --text-inverse: #020617;   /* Teks gelap di atas tombol primary terang */
 
-  /* === GLASSMORPHISM & BORDERS === */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Memberi efek 3D di ujung atas */
-  --blur: blur(16px);
+  /* === 🧊 GLASSMORPHISM === */
+  --glass-bg-subtle: rgba(255, 255, 255, 0.02); /* Sangat tipis */
+  --glass-bg-base: rgba(255, 255, 255, 0.04);   /* Standar card glass */
+  --glass-bg-strong: rgba(255, 255, 255, 0.08); /* Card yang sedang aktif/di-hover */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.15); /* Cahaya pantulan atas 3D */
+  
+  --blur-sm: blur(8px);
+  --blur-md: blur(16px);
+  --blur-lg: blur(24px);
 
-  /* === SHADOWS & GLOWS (DIPERBAIKI) === */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
-  --glow-primary: 0 8px 30px rgba(124, 58, 237, 0.35); /* Dipisah menjadi efek glow */
+  /* === 🌑 SHADOWS & GLOWS === */
+  /* Menggunakan multiple shadows untuk efek lebih realistis dan premium */
+  --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.4), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.6);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2); /* Efek tombol ditekan */
+  
+  --glow-primary: 0 0 24px -4px rgba(124, 58, 237, 0.4);
+  --glow-accent: 0 0 24px -4px rgba(6, 182, 212, 0.4);
 
-  /* === BORDER RADIUS === */
-  --radius-sm: 8px;   /* Diperkecil agar lebih proporsional untuk tombol kecil */
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-full: 9999px;
+  /* === 📐 BORDER RADIUS === */
+  --radius-xs: 6px;    /* Checkbox, tag kecil */
+  --radius-sm: 8px;    /* Input form, tombol kecil */
+  --radius-md: 12px;   /* Card kecil, tombol besar */
+  --radius-lg: 16px;   /* Card standar */
+  --radius-xl: 24px;   /* Modal, kontainer utama */
+  --radius-full: 9999px; /* Avatar, pill badge */
 
-  /* === TYPOGRAPHY === */
-  --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-
-  /* === TRANSITIONS === */
-  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  /* === ⚡ TRANSITIONS === */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Efek memantul ringan */
+  
+  --transition-fast: all 0.15s var(--ease-smooth);
+  --transition-base: all 0.3s var(--ease-smooth);
+  --transition-slow: all 0.5s var(--ease-smooth);
+  --transition-bounce: all 0.4s var(--ease-spring); /* Gunakan untuk tombol di-hover */
 }
 
 
