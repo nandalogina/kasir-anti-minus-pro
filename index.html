@@ -14,21 +14,62 @@
 
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      --success: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --dark: #0f172a;
-      --gray: #64748b;
-      --light-gray: #cbd5e1;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+  /* === BRAND COLORS === */
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-light: #a78bfa;
+
+  /* === GRADIENTS === */
+  --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 45%, #06b6d4 100%);
+  --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --danger-gradient:  linear-gradient(135deg, #ef4444 0%, #be123c 100%);
+
+  /* === STATUS === */
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #06b6d4;
+
+  /* === BACKGROUNDS === */
+  --bg-main: #020617; /* Background utama */
+  --bg-surface: #0f172a; /* Card padat tanpa glass */
+  --bg-elevated: #1e293b; /* Dropdown / Modal padat */
+
+  /* === TEXT COLORS (BARU) === */
+  --text-primary: #f8fafc; /* Judul & teks utama */
+  --text-secondary: #94a3b8; /* Subjudul & paragraf pendukung */
+  --text-muted: #64748b; /* Placeholder & teks kecil */
+  --text-inverse: #0f172a; /* Teks di atas elemen berwarna terang/primary */
+
+  /* === GLASSMORPHISM & BORDERS === */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Memberi efek 3D di ujung atas */
+  --blur: blur(16px);
+
+  /* === SHADOWS & GLOWS (DIPERBAIKI) === */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --glow-primary: 0 8px 30px rgba(124, 58, 237, 0.35); /* Dipisah menjadi efek glow */
+
+  /* === BORDER RADIUS === */
+  --radius-sm: 8px;   /* Diperkecil agar lebih proporsional untuk tombol kecil */
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* === TYPOGRAPHY === */
+  --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* === TRANSITIONS === */
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
     
@@ -316,52 +357,77 @@
     </div>
   </div>
 
-  <!-- HITUNG PENJUALAN PAGE -->
-  <div id="hitungpenjualan" class="page">
-    <h1 class="header-title animate-fade">📊 Hitung Uang Penjualan</h1>
-    <div class="card animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-receipt"></i> Rekap Pendapatan</h2></div>
-      <p style="font-size:15px; color:var(--gray); margin-bottom:25px; line-height: 1.6;">
-        Hitung fisik uang di laci saat ini lalu kurangi dengan modal awal untuk mengetahui total penjualan bersih Anda hari ini.
-      </p>
-      
-      <div class="input-group main-input">
-        <label>Modal Awal Hari Ini</label>
-        <div class="input-currency">
-          <input type="text" class="uang-input" id="modalAwalHarian" placeholder="0">
-        </div>
+ <!-- HITUNG PENJUALAN PAGE - VERSI PREMIUM -->
+<div id="hitungpenjualan" class="page">
+  <h1 class="header-title">📊 Hitung Uang Penjualan</h1>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2><i class="fa-solid fa-receipt"></i> Rekap Pendapatan Hari Ini</h2>
+    </div>
+    
+    <p style="font-size:15.5px; color:var(--gray); margin-bottom:30px; line-height:1.7;">
+      Hitung berapa uang fisik yang ada di laci, lalu kurangi dengan modal awal untuk tahu berapa keuntungan hari ini.
+    </p>
+
+    <!-- Modal Awal -->
+    <div class="input-group main-input">
+      <label>
+        Modal Awal Hari Ini 
+        <span class="info-tooltip" title="Modal awal adalah uang yang kamu siapkan di pagi hari untuk mulai berjualan. Contoh: Rp500.000">ⓘ</span>
+      </label>
+      <div class="input-currency">
+        <input type="text" class="uang-input" id="modalAwalHarian" placeholder="0">
+      </div>
+    </div>
+
+    <h3 style="margin:35px 0 18px; color:var(--dark); font-weight:700; font-size:16px;">
+      <i class="fa-solid fa-boxes-stacked"></i> Hitung Fisik Uang di Laci
+      <span class="info-tooltip" title="Ini adalah jumlah uang fisik (lembar/keping) yang benar-benar ada di laci kasir sekarang">ⓘ</span>
+    </h3>
+    
+    <div class="grid" id="fisikPenjualanInputs"></div>
+
+    <div class="btn-group" style="margin-top:40px;">
+      <button class="btn-primary" onclick="hitungPenjualanBersih()">
+        <i class="fa-solid fa-calculator"></i> Hitung Penjualan Bersih
+      </button>
+      <button class="btn-outline" onclick="resetPenjualanForm()">
+        <i class="fa-solid fa-rotate-right"></i> Reset Semua
+      </button>
+    </div>
+
+    <!-- HASIL BOX -->
+    <div id="hasilBox" class="result-box" style="display: none;">
+      <div class="result-item">
+        <p>
+          <i class="fa-solid fa-wallet"></i> 
+          Total Fisik Uang di Laci
+          <span class="info-tooltip" title="Ini adalah jumlah SELURUH uang yang ada di laci saat ini (dari semua pecahan)">ⓘ</span>
+        </p>
+        <h3 id="totalFisikDisplay">Rp 0</h3>
       </div>
 
-      <h3 style="font-size:15px; margin-bottom:20px; color:var(--dark); font-weight:700;">
-        <i class="fa-solid fa-boxes-stacked"></i> Hitung Fisik Laci (Jumlah Lembar/Keping)
-      </h3>
-      <div class="grid" id="fisikPenjualanInputs"></div>
-
-      <div class="btn-group">
-        <button class="btn-primary" onclick="hitungPenjualanBersih()">
-          <i class="fa-solid fa-calculator"></i> Hitung Penjualan
-        </button>
-        <button class="btn-outline" onclick="resetInputs('fisikPenjualanInputs'); document.getElementById('modalAwalHarian').value=''; document.getElementById('hasilBox').style.display='none';">
-          <i class="fa-solid fa-rotate-right"></i> Reset
-        </button>
+      <div class="result-item">
+        <p>
+          <i class="fa-solid fa-arrow-down"></i> 
+          Modal Awal
+          <span class="info-tooltip" title="Uang yang kamu masukkan di awal hari untuk modal jualan">ⓘ</span>
+        </p>
+        <h3 id="modalDisplay" style="color: var(--warning);">Rp 0</h3>
       </div>
 
-      <div id="hasilBox" class="result-box" style="display: none;">
-        <div class="result-item">
-          <p><i class="fa-solid fa-wallet"></i> Total Fisik Laci</p>
-          <h3 id="totalFisikDisplay">Rp 0</h3>
-        </div>
-        <div class="result-item">
-          <p><i class="fa-solid fa-arrow-down"></i> Modal Awal</p>
-          <h3 id="modalDisplay" style="color: var(--warning);">Rp 0</h3>
-        </div>
-        <div class="result-item" style="border-left: 4px solid var(--success); padding-left: 25px;">
-          <p><i class="fa-solid fa-chart-line"></i> Penjualan Bersih</p>
-          <h3 id="penjualanBersihDisplay" style="color: var(--success);">Rp 0</h3>
-        </div>
+      <div class="result-item" style="border-left: 5px solid var(--success); padding-left: 25px; background: #f0fdf4;">
+        <p>
+          <i class="fa-solid fa-chart-line"></i> 
+          Penjualan Bersih
+          <span class="info-tooltip" title="Penjualan Bersih = Total uang di laci SEKARANG - Modal Awal. Ini adalah keuntungan hari ini.">ⓘ</span>
+        </p>
+        <h3 id="penjualanBersihDisplay" style="color: var(--success); font-size: 28px;">Rp 0</h3>
       </div>
     </div>
   </div>
+</div>
 
   <!-- STOK BARANG PAGE -->
   <div id="stokbarang" class="page">
@@ -399,7 +465,7 @@
       <div class="card-header"><h2><i class="fa-solid fa-scale-balanced"></i> Rekap & Pisahkan Modal Besok</h2></div>
       
       <div class="input-group main-input">
-        <label>Target Modal Besok</label>
+        <label> Modal untuk Besok</label>
         <div class="input-currency">
           <input type="text" class="uang-input" id="targetModal" placeholder="0">
         </div>
@@ -596,7 +662,7 @@
 
   function hitungPemisahanModal() {
     const target = getRawValue(document.getElementById("targetModal").value);
-    if (target <= 0) return Swal.fire({icon:'error', text:'Masukkan target modal besok!'});
+    if (target <= 0) return Swal.fire({icon:'error', text:'Masukkan modal besok!'});
     
     let fisik = {}, totalFisik = 0;
     pecahan.forEach(n => {
