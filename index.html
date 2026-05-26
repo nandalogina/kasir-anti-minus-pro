@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver/dist/FileSaver.min.js"></script>
 
   <style>
     :root {
@@ -371,6 +373,9 @@
       <div class="card-header"><h2><i class="fa-solid fa-list-check"></i> Daftar Stok Barang</h2></div>
       <div class="search-box">
         <input type="text" id="searchStok" placeholder="🔍 Cari berdasarkan nama, kode, atau lokasi..." oninput="tampilkanStokBarang()">
+         <button class="btn-success magnetic" onclick="exportToExcel()">
+    <i class="fa-solid fa-file-excel"></i> Export Excel
+  </button>
         <button class="btn-primary magnetic" onclick="tampilkanStokBarang()"><i class="fa-solid fa-magnifying-glass"></i></button>
       </div>
       <div class="table-container">
@@ -693,6 +698,116 @@
       if (pageId === 'stokbarang') tampilkanStokBarang();
     });
   });
+
+ async function exportToExcel() {
+  if (dataStokBarang.length === 0) {
+    return fireCyberAlert({
+      icon: 'warning',
+      title: 'Data Kosong',
+      text: 'Belum ada data stok.'
+    });
+  }
+
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Stok Barang");
+
+  // HEADER
+  worksheet.columns = [
+    { header: "No", key: "no", width: 10 },
+    { header: "Nama Barang", key: "nama", width: 30 },
+    { header: "Kode Barang", key: "kode", width: 25 },
+    { header: "Jumlah", key: "jumlah", width: 15 },
+    { header: "Lokasi", key: "lokasi", width: 20 }
+  ];
+
+  // STYLE HEADER
+  worksheet.getRow(1).eachCell(cell => {
+    cell.font = {
+      bold: true,
+      color: { argb: "FFFFFFFF" },
+      size: 12
+    };
+
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: "6366F1" }
+    };
+
+    cell.alignment = {
+      vertical: 'middle',
+      horizontal: 'center'
+    };
+
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+
+  // DATA
+  dataStokBarang.forEach((item, index) => {
+    const row = worksheet.addRow({
+      no: index + 1,
+      nama: item.nama,
+      kode: item.kode,
+      jumlah: item.jumlah,
+      lokasi: item.lokasi
+    });
+
+    // Zebra style
+    row.eachCell(cell => {
+      cell.border = {
+        top: { style: 'thin', color: { argb: '444444' } },
+        left: { style: 'thin', color: { argb: '444444' } },
+        bottom: { style: 'thin', color: { argb: '444444' } },
+        right: { style: 'thin', color: { argb: '444444' } }
+      };
+
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'center'
+      };
+
+      if (index % 2 === 0) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '1E293B' }
+        };
+      }
+    });
+  });
+
+  // Freeze Header
+  worksheet.views = [
+    { state: 'frozen', ySplit: 1 }
+  ];
+
+  // Filter
+  worksheet.autoFilter = {
+    from: 'A1',
+    to: 'E1'
+  };
+
+  // Generate file
+  const buffer = await workbook.xlsx.writeBuffer();
+
+  saveAs(
+    new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }),
+    `stok_barang_${new Date().toISOString().split('T')[0]}.xlsx`
+  );
+
+  fireCyberAlert({
+    icon: 'success',
+    title: 'Export Berhasil',
+    text: 'Excel dengan styling berhasil dibuat.'
+  });
+}
 
   // INITIALIZATION
   initPecahanInputs();
