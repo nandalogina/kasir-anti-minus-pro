@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDENTITY VAULT OS — Your Personal Security Operating System</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        vault: {
+                            dark: '#030712',
+                            card: 'rgba(17, 24, 39, 0.7)',
+                            accent: '#06b6d4',
+                            neonBlue: '#3b82f6',
+                            neonPurple: '#a855f7',
+                            neonCyan: '#22d3ee',
+                            neonGreen: '#10b981',
+                            neonRed: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        :root {
+            --glow-cyan: rgba(34, 211, 238, 0.15);
+            --glow-purple: rgba(168, 85, 247, 0.15);
+        }
+
+        body {
+            background-color: #020617;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.6); }
+
+        /* Cyberpunk Grid Background */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-panel {
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-panel-neon {
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.05);
+        }
+
+        /* Mouse Reactive Glow Base */
+        .interactive-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.07) 0%, rgba(168, 85, 247, 0.03) 50%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        /* CSS Animations */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scanline-effect::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.3; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+            50% { opacity: 0.6; box-shadow: 0 0 25px rgba(34, 211, 238, 0.4); }
+        }
+
+        .pulse-neon { animation: pulse-glow 3s infinite; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        /* Utilities */
+        .blur-masked {
+            filter: blur(8px);
+            transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blur-masked:hover, .blur-masked.unmasked {
+            filter: blur(0px);
+        }
+    </style>
+</head>
+<body class="text-slate-200 h-full font-sans antialiased scanline-effect">
+
+    <div class="cyber-grid"></div>
+    <div id="mouseGlow" class="interactive-glow" style="top: 0; left: 0;"></div>
+
+    <div id="toastContainer" class="fixed top-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <div id="bootScreen" class="fixed inset-0 z-50 bg-black flex flex-col justify-center items-center p-6 font-mono text-xs md:text-sm">
+        <div class="w-full max-w-lg space-y-3">
+            <div class="flex items-center space-x-2 text-cyan-400 font-bold mb-4">
+                <i class="fa-solid fa-terminal animate-pulse"></i>
+                <span>IDENTITY VAULT OS [v4.0.26]</span>
+            </div>
+            <div id="bootConsole" class="space-y-1 text-slate-400 h-48 overflow-y-auto"></div>
+            <div class="pt-4 border-t border-slate-800">
+                <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                    <div id="bootProgress" class="bg-gradient-to-r from-blue-500 to-cyan-400 h-full w-0 transition-all duration-100 ease-out"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                    <span>SYSTEM COMPILATION SECURE</span>
+                    <span id="bootPercent">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginScreen" class="fixed inset-0 z-40 bg-slate-950/90 backdrop-blur-2xl hidden flex flex-col justify-center items-center p-4">
+        <div id="loginCard" class="glass-panel w-full max-w-md rounded-2xl p-8 border border-slate-800 text-center relative overflow-hidden group">
+            <div class="absolute -top-10 -right-10 w-32 height-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all duration-700"></div>
+            
+            <div class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-inner text-cyan-400 text-2xl relative">
+                <i class="fa-solid fa-shield-halved animate-float"></i>
+                <div class="absolute inset-0 rounded-2xl border border-cyan-500/30 opacity-50 pulse-neon"></div>
+            </div>
+            
+            <h1 class="text-2xl font-bold tracking-tight text-white mb-1">IDENTITY VAULT <span class="text-cyan-400 font-mono text-xl font-medium">OS</span></h1>
+            <p class="text-xs text-slate-400 tracking-wider uppercase mb-8">Your Personal Security Operating System</p>
+            
+            <div class="space-y-4">
+                <label class="block text-xs font-mono uppercase text-slate-400 tracking-widest text-left">Master Security PIN</label>
+                <div class="relative">
+                    <input type="password" id="pinInput" maxlength="6" placeholder="••••••" 
+                           class="w-full bg-slate-950/80 tracking-[0.5em] text-center font-mono text-2xl py-3 px-4 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 text-cyan-400 transition-all">
+                    <button type="button" id="togglePinView" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+                
+                <button type="button" id="loginBtn" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-cyan-500/10 active:scale-[0.99] font-mono text-xs tracking-wider uppercase">
+                    UNSEAL VAULT <i class="fa-solid fa-unlock ml-2 text-[10px]"></i>
+                </button>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-slate-900/50 flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                <span><i class="fa-solid fa-lock text-cyan-500/50 mr-1"></i> ENCRYPTION: AES-256</span>
+                <span>LOCAL DEVICE MODE</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContainer" class="relative z-10 min-h-screen flex flex-col opacity-0 transition-opacity duration-700">
+        
+        <header class="glass-panel sticky top-0 z-30 border-b border-slate-900 px-4 lg:px-8 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 text-cyan-400 text-base">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-bold tracking-tight text-white">IDENTITY VAULT</span>
+                        <span class="text-[9px] font-mono bg-cyan-500/10 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 font-bold">OS</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 hidden sm:block tracking-wide">SECURE KEEPER</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center max-w-md w-full mx-8 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-500 text-xs"></i>
+                <input type="text" id="globalSearch" placeholder="Search identities (e.g., 'nik', 'bpjs', 'passport')... [Ctrl + F]" 
+                       class="w-full bg-slate-950/50 text-xs pl-10 pr-16 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all text-slate-300">
+                <kbd class="absolute right-3 text-[9px] font-mono bg-slate-900 text-slate-500 border border-slate-800 px-1.5 py-0.5 rounded shadow-sm">Ctrl+K</kbd>
+            </div>
+
+            <div class="flex items-center space-x-4 lg:space-x-6">
+                <div class="hidden lg:flex items-center space-x-3 font-mono text-[10px] bg-slate-950/60 py-1.5 px-3 rounded-lg border border-slate-900">
+                    <div class="flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                        <span class="text-slate-400">SECURE</span>
+                    </div>
+                    <span class="text-slate-700">|</span>
+                    <span class="text-cyan-400">ENCRYPTED</span>
+                    <span class="text-slate-700">|</span>
+                    <span class="text-slate-400">LOCAL</span>
+                </div>
+
+                <div class="text-right font-mono hidden sm:block">
+                    <div id="liveClock" class="text-xs text-white font-bold tracking-wider">00:00:00</div>
+                    <div id="liveDate" class="text-[9px] text-slate-500 uppercase tracking-widest">LOADING UTC...</div>
+                </div>
+
+                <div class="flex items-center border-l border-slate-800 pl-4 space-x-2">
+                    <button id="lockVaultBtn" title="Lock System (Esc)" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-amber-400 border border-slate-800 flex items-center justify-center transition-all">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                    </button>
+                    <button id="logoutBtn" title="Logout System (Ctrl + L)" class="w-8 h-8 rounded-lg bg-slate-900/50 hover:bg-red-950/30 text-slate-400 hover:text-red-400 border border-slate-800/80 hover:border-red-900/50 flex items-center justify-center transition-all">
+                        <i class="fa-solid fa-power-off text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-6 lg:sticky lg:top-20">
+                
+                <div class="glass-panel rounded-2xl p-5 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-blue-500"></div>
+                    <h3 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-400 mb-4 flex items-center justify-between">
+                        <span>SECURITY ARCHITECTURE</span>
+                        <i class="fa-solid fa-microchip text-cyan-500/50 text-sm"></i>
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-slate-950/60 border border-slate-900 p-3 rounded-xl">
+                            <span class="text-[10px] font-mono text-slate-500 block mb-1">CYPHER FRAMEWORK</span>
+                            <span class="text-xs font-mono font-bold text-white flex items-center">
+                                <i class="fa-solid fa-key text-cyan-400 text-[10px] mr-1.5"></i> AES-256
+                            </span>
+                        </div>
+                        <div class="bg-slate-950/60 border border-slate-900 p-3 rounded-xl">
+                            <span class="text-[10px] font-mono text-slate-500 block mb-1">VAULT HEALTH</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400 flex items-center">
+                                <i class="fa-solid fa-heart-pulse text-[10px] mr-1.5"></i> 98.4%
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex justify-between items-center bg-slate-950/30 p-2.5 rounded-lg border border-slate-900/60">
+                            <span class="text-slate-400"><i class="fa-solid fa-folder text-slate-600 mr-2"></i>Identity Records</span>
+                            <span id="statRecords" class="font-bold text-white text-sm">0</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-950/30 p-2.5 rounded-lg border border-slate-900/60">
+                            <span class="text-slate-400"><i class="fa-solid fa-shield text-slate-600 mr-2"></i>Security Score</span>
+                            <span class="font-bold text-cyan-400 text-sm flex items-center"><span id="statScore">0</span><span class="text-[10px] text-slate-500 font-normal">/100</span></span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-950/30 p-2.5 rounded-lg border border-slate-900/60">
+                            <span class="text-slate-400"><i class="fa-solid fa-server text-slate-600 mr-2"></i>Vault Capacity</span>
+                            <span class="font-bold text-purple-400 text-sm flex items-center"><span id="statCapacity">0</span><span class="text-[10px] text-slate-500 font-normal">%</span></span>
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-950/30 p-2.5 rounded-lg border border-slate-900/60">
+                            <span class="text-slate-400"><i class="fa-solid fa-clock text-slate-600 mr-2"></i>Session Duration</span>
+                            <span id="statSession" class="font-bold text-slate-300">0s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-5">
+                    <h3 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-400 mb-4 flex items-center">
+                        <i class="fa-solid fa-bolt text-amber-400 mr-2 text-xs animate-pulse"></i> RECENT ACCESS PANEL
+                    </h3>
+                    <div id="recentAccessList" class="space-y-2 text-xs font-mono">
+                        <div class="text-slate-500 text-center py-4 bg-slate-950/40 rounded-xl border border-slate-900">No identities accessed yet this session</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xs font-mono font-bold tracking-wider uppercase text-slate-400 flex items-center">
+                            <i class="fa-solid fa-list-check text-purple-400 mr-2 text-xs"></i> OPERATIONS ACTIVITY LOG
+                        </h3>
+                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                    </div>
+                    <div id="activityLog" class="space-y-2 h-44 overflow-y-auto pr-1 font-mono text-[11px]">
+                        </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="block md:hidden relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="mobileSearch" placeholder="Search identities..." 
+                           class="w-full bg-slate-900/80 text-xs pl-10 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500/50 text-slate-300">
+                </div>
+
+                <div class="glass-panel rounded-2xl p-4 border border-cyan-500/10 bg-gradient-to-r from-cyan-950/10 via-slate-950/50 to-slate-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20 text-xs">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="text-xs">
+                            <span class="text-white font-bold block">Zero-Knowledge Offline Framework Architecture</span>
+                            <span class="text-slate-400">All data processes instantly on your localized hardware layer. No packets reach external matrix nodes.</span>
+                        </div>
+                    </div>
+                    <div class="text-xs font-mono bg-slate-950 text-slate-400 px-2.5 py-1 rounded-md border border-slate-900 self-end sm:self-auto shrink-0">
+                        SYSTEM STATUS: ACTIVE
+                    </div>
+                </div>
+
+                <div id="vaultCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>
+            </div>
+        </main>
+        
+        <footer class="mt-auto border-t border-slate-950 py-3 px-6 text-center text-[10px] font-mono text-slate-600 flex flex-col sm:flex-row justify-between items-center gap-2 bg-slate-950/20">
+            <div>IDENTITY VAULT OS &bull; INDUSTRIAL GRADE DIGITAL SECURITY CONTAINER</div>
+            <div class="flex space-x-4">
+                <span>[Ctrl+F] Focus Search</span>
+                <span>[Ctrl+K] Palette</span>
+                <span>[Esc] Lock</span>
+            </div>
+        </footer>
+    </div>
+
+    <div id="commandPalette" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden justify-center items-start p-4 md:p-24 transition-all duration-300">
+        <div class="glass-panel w-full max-w-xl rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-cyan-500/5 mt-12 animate-float">
+            <div class="p-4 border-b border-slate-800 flex items-center space-x-3 bg-slate-950/80">
+                <i class="fa-solid fa-terminal text-cyan-400 text-xs font-mono"></i>
+                <input type="text" id="paletteSearch" placeholder="Type a command or lookup field..." 
+                       class="w-full bg-transparent text-sm text-white focus:outline-none font-mono">
+                <span class="text-[9px] font-mono text-slate-500 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">ESC TO CLOSE</span>
+            </div>
+            
+            <div id="paletteResults" class="p-2 max-h-72 overflow-y-auto space-y-0.5 bg-slate-950/30 font-mono text-xs">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * IDENTITY DATABASE SOURCE CONTROL (Object configuration mapping)
+         * Easily adjust or enhance data items inside this standard JSON mapping profile.
+         */
+        const vaultData = {
+            nama: "Achmad Dhani Syahputra, S.Kom",
+            nik: "3174092810940003",
+            kk: "3174091204180021",
+            bpjs: "0001249871234",
+            npwp: "42.091.234.5-013.000",
+            sim: "941012390481",
+            paspor: "X1298471",
+            email: "dhani.syahputra@cybersec.id",
+            hp: "+62 88",
+            alamat: "Jalan Gunung Tangkuban Perahu 1 gang 2 no 3, denpasar, Bali",
+            ttl: "Bali, 19 agustus 2004",
+            no_kartu_bca: "4556 7812 3456 7890",
+            id_bca_d: "DHANISYAH94",
+            norek_bca: "8040 1234 56",
+            pass_bca: "CyberSecPass2026!"
+        };
+
+        // Static Icon & Metadata definitions mapping schema
+        const dataMeta = {
+            nama: { label: "Full Name", icon: "fa-user-shield", color: "from-blue-500 to-indigo-500" },
+            nik: { label: "NIK (Nomor Induk Kependudukan)", icon: "fa-id-card", color: "from-cyan-500 to-blue-500" },
+            kk: { label: "KK (Kartu Keluarga)", icon: "fa-users", color: "from-purple-500 to-indigo-500" },
+            bpjs: { label: "BPJS Kesehatan", icon: "fa-heart-pulse", color: "from-emerald-500 to-teal-500" },
+            npwp: { label: "NPWP (Nomor Pokok Wajib Pajak)", icon: "fa-wallet", color: "from-amber-500 to-orange-500" },
+            sim: { label: "SIM (Surat Izin Mengemudi)", icon: "fa-car-burst", color: "from-sky-500 to-blue-600" },
+            paspor: { label: "International Passport Number", icon: "fa-passport", color: "from-fuchsia-500 to-pink-500" },
+            email: { label: "Primary Core Email Address", icon: "fa-envelope", color: "from-blue-600 to-cyan-500" },
+            hp: { label: "Secure Mobile Endpoint Connection", icon: "fa-mobile-screen-button", color: "from-teal-500 to-emerald-600" },
+            alamat: { label: "Registered Geolocation Residency Address", icon: "fa-location-dot", color: "from-rose-500 to-red-500" },
+            ttl: { label: "Date & Place of Birth Alignment", icon: "fa-calendar-days", color: "from-indigo-500 to-purple-500" },
+            no_kartu_bca: { label: "BCA Debit / Credit Card Number", icon: "fa-credit-card", color: "from-blue-700 to-cyan-600" },
+            id_bca_d: { label: "BCA KlikBCA / m-BCA User ID", icon: "fa-user-gear", color: "from-blue-800 to-indigo-700" },
+            norek_bca: { label: "BCA Bank Account Number", icon: "fa-building-columns", color: "from-sky-700 to-blue-600" },
+            pass_bca: { label: "BCA Secure Access Password", icon: "fa-vault", color: "from-red-600 to-rose-700" }
+        };
+
+        // System state parameters
+        const SYSTEM_PIN = "0808"; // Configuration Login Credentials Unseal PIN
+        let isLocked = true;
+        let bootCompleted = false;
+        let sessionSeconds = 0;
+        let sessionTimerInterval = null;
+        let autoLockCountdown = 300; // 5 minutes inactivity index metrics
+        let recentAccessArray = [];
+
+        // Dynamic System Architecture Elements Hooking
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMouseGlow();
+            startBootSequence();
+            setupClockAndDateEngine();
+            buildVaultCardsLayout();
+            bindSystemInputTriggers();
+        });
+
+        // Background Interaction Tracker
+        function initializeMouseGlow() {
+            const glow = document.getElementById('mouseGlow');
+            window.addEventListener('mousemove', (e) => {
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+            });
+        }
+
+        /**
+         * INITIALIZATION BOOT OPERATIONAL SEQUENCE ENGINE
+         */
+        function startBootSequence() {
+            const logs = [
+                "INITIALIZING IDENTITY VAULT OS CORE ARCHITECTURE...",
+                "LOADING ENCRYPTION MODULE [AES-256 BIT DIRECTIVE]... OK",
+                "ESTABLISHING LOCAL MEMORY SEGMENT BUFFER... DEPLOYED",
+                "VERIFYING INTEGRITY CHECKSUMS... 100% VALID",
+                "MOUNTING DATA SCHEMA REPOSITORIES... SUCCESS",
+                "INJECTING GLASSMORPHISM VISUAL MATRIX LAYER...",
+                "POLISHING USER CONTAINER INTERACTION INTERFACES...",
+                "CLEARING TRANSIENT CACHE ARTIFACTS... SANITIZED",
+                "ACCESS CONTROL PARADIGM READY FOR INPUT CHALLENGE."
+            ];
+            
+            const consoleBox = document.getElementById('bootConsole');
+            const progress = document.getElementById('bootProgress');
+            const percent = document.getElementById('bootPercent');
+            
+            let currentLogIndex = 0;
+            
+            function printLog() {
+                if (currentLogIndex < logs.length) {
+                    const line = document.createElement('p');
+                    line.className = "flex items-center space-x-2";
+                    line.innerHTML = `<span class="text-cyan-500 font-bold">></span> <span>${logs[currentLogIndex]}</span>`;
+                    consoleBox.appendChild(line);
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                    
+                    currentLogIndex++;
+                    
+                    // Track loading matrix percentage increments
+                    let progressRatio = (currentLogIndex / logs.length) * 100;
+                    progress.style.w00idth = `${progressRatio}%`;
+                    progress.style.width = `${progressRatio}%`;
+                    percent.innerText = `${Math.floor(progressRatio)}%`;
+                    
+                    setTimeout(printLog, 220 + Math.random() * 150);
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('bootScreen').classList.add('hidden');
+                        showLoginScreen();
+                    }, 600);
+                }
+            }
+            
+            setTimeout(printLog, 400);
+        }
+
+        function showLoginScreen() {
+            const login = document.getElementById('loginScreen');
+            login.classList.remove('hidden');
+            document.getElementById('pinInput').focus();
+            appendLog("System boot sequence successfully verified.");
+        }
+
+        /**
+         * CARD REUSABLE INTERFACE STRUCTURAL INJECTION ARCHITECTURE
+         */
+        function buildVaultCardsLayout() {
+            const container = document.getElementById('vaultCardsGrid');
+            container.innerHTML = ""; // Wipe structure clean
+
+            Object.keys(vaultData).forEach(key => {
+                const meta = dataMeta[key];
+                const value = vaultData[key];
+
+                const card = document.createElement('div');
+                card.id = `vault-card-${key}`;
+                card.className = "glass-panel rounded-2xl p-5 hover:glass-panel-neon transition-all duration-300 relative group flex flex-col justify-between space-y-4 hover:-translate-y-1";
+                card.setAttribute('data-key', key);
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-mono tracking-wider text-slate-500 uppercase">${meta.label}</span>
+                            <div class="w-7 h-7 rounded-lg bg-gradient-to-br ${meta.color} text-white flex items-center justify-center text-xs opacity-80 group-hover:opacity-100 shadow-sm transition-opacity">
+                                <i class="fa-solid ${meta.icon}"></i>
+                            </div>
+                        </div>
+                        <div class="relative mt-1">
+                            <div id="value-display-${key}" class="font-mono text-base font-bold text-white tracking-wide break-words pr-2 blur-masked">
+                                ${value}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center pt-3 border-t border-slate-900/40">
+                        <span class="text-[10px] font-mono text-cyan-400/60 uppercase group-hover:text-cyan-400 transition-colors">${key} context</span>
+                        <div class="flex space-x-1.5">
+                            <button onclick="toggleCardMask('${key}')" title="Toggle visibility" class="w-7 h-7 rounded-md bg-slate-950/80 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-900 flex items-center justify-center text-xs transition-colors">
+                                <i id="eye-icon-${key}" class="fa-solid fa-eye-slash"></i>
+                            </button>
+                            <button onclick="copyToClipboard('${key}')" title="Copy encrypted value" class="w-7 h-7 rounded-md bg-slate-950/80 hover:bg-slate-900 text-slate-400 hover:text-cyan-400 border border-slate-900 flex items-center justify-center text-xs transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Update Total Stat counter items metrics automatically
+            document.getElementById('statRecords').innerText = Object.keys(vaultData).length;
+        }
+
+        /**
+         * CLOCK & TIME ENGINE PRODUCTION PIPELINE
+         */
+        function setupClockAndDateEngine() {
+            function pulseTime() {
+                const now = new Date();
+                document.getElementById('liveClock').innerText = now.toTimeString().split(' ')[0];
+                
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', options);
+                
+                // Track inactivity indices variables dynamically
+                if (!isLocked) {
+                    autoLockCountdown--;
+                    if (autoLockCountdown <= 0) {
+                        lockVaultRuntime();
+                        showToast("System auto-locked due to prolonged inactivity parameter timeout.", "warning");
+                    }
+                }
+            }
+            setInterval(pulseTime, 1000);
+            pulseTime();
+        }
+
+        /**
+         * AUTHENTICATION GATE OPERATIONS CONSOLE
+         */
+        function handleVaultUnsealAttempt() {
+            const inputField = document.getElementById('pinInput');
+            const card = document.getElementById('loginCard');
+            
+            if (inputField.value === SYSTEM_PIN) {
+                // SUCCESS PARADIGM
+                card.classList.remove('animate-shake');
+                card.style.boxShadow = "0 0 40px rgba(34, 211, 238, 0.4)";
+                appendLog("Authentication challenge signature accepted.");
+                
+                setTimeout(() => {
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('appContainer').classList.remove('opacity-0');
+                    isLocked = false;
+                    resetInactivityTimer();
+                    startSessionAnalyticsCounter();
+                    triggerStatisticsCountersAnimate();
+                    showToast("Identity Vault Secure Session Established.", "success");
+                    appendLog("System Core Modules fully active. Welcome operational director.");
+                }, 400);
+            } else {
+                // FAILURE PARADIGM
+                inputField.value = "";
+                card.classList.remove('animate-shake');
+                void card.offsetWidth; // Trigger DOM Reflow execution pipeline sequence
+                card.classList.add('animate-shake');
+                showToast("Access Denied: Invalid Security Pin Signature.", "error");
+                appendLog("WARNING: Unauthorized access attempt registered with erroneous PIN mapping.");
+            }
+        }
+
+        function lockVaultRuntime() {
+            isLocked = true;
+            clearInterval(sessionTimerInterval);
+            document.getElementById('appContainer').classList.add('opacity-0');
+            document.getElementById('pinInput').value = "";
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('pinInput').focus();
+            appendLog("Vault secure lockdown parameter sealed successfully.");
+        }
+
+        function clearSessionDestruct() {
+            appendLog("System session log destruction protocol initialized.");
+            location.reload();
+        }
+
+        /**
+         * SECURITY LOGGING FRAMEWORK AUDITING
+         */
+        function appendLog(message) {
+            const container = document.getElementById('activityLog');
+            const timestamp = new Date().toTimeString().split(' ')[0];
+            const logRow = document.createElement('div');
+            logRow.className = "text-slate-400 border-b border-slate-950/40 pb-1 flex items-start space-x-2";
+            logRow.innerHTML = `<span class="text-slate-600 shrink-0">[${timestamp}]</span> <span class="break-words">${message}</span>`;
+            
+            container.insertBefore(logRow, container.firstChild);
+        }
+
+        /**
+         * ANALYTICS RUNTIME MATH ENGINE COUNTERS
+         */
+        function triggerStatisticsCountersAnimate() {
+            animateCounterElement('statScore', 0, 98, 1200);
+            animateCounterElement('statCapacity', 0, 14, 1500);
+        }
+
+        function animateCounterElement(elementId, start, end, duration) {
+            const element = document.getElementById(elementId);
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                element.innerText = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        function startSessionAnalyticsCounter() {
+            sessionSeconds = 0;
+            sessionTimerInterval = setInterval(() => {
+                sessionSeconds++;
+                document.getElementById('statSession').innerText = `${sessionSeconds}s`;
+            }, 1000);
+        }
+
+        /**
+         * ACTIONS PROCESSING DIRECTIVES (Copy / Visibility / Realtime Queries)
+         */
+        function toggleCardMask(key) {
+            resetInactivityTimer();
+            const textDisplay = document.getElementById(`value-display-${key}`);
+            const eyeIcon = document.getElementById(`eye-icon-${key}`);
+            
+            if (textDisplay.classList.contains('unmasked')) {
+                textDisplay.classList.remove('unmasked');
+                eyeIcon.className = "fa-solid fa-eye-slash";
+                appendLog(`Data mask added back over security field index [${key.toUpperCase()}].`);
+            } else {
+                textDisplay.classList.add('unmasked');
+                eyeIcon.className = "fa-solid fa-eye text-cyan-400";
+                appendLog(`Decrypted lookup view accessed for identifier token: [${key.toUpperCase()}].`);
+                registerRecentAccess(key);
+            }
+        }
+
+        function copyToClipboard(key) {
+            resetInactivityTimer();
+            const value = vaultData[key];
+            const meta = dataMeta[key];
+            
+            navigator.clipboard.writeText(value).then(() => {
+                showToast(`✓ ${meta.label.split(' ')[0]} copied successfully to secure cache buffer.`, "success");
+                appendLog(`Export token copied to shared local system pipeline context: [${key.toUpperCase()}].`);
+                registerRecentAccess(key);
+            }).catch(err => {
+                showToast("System error compiling clipboard payload pipeline assignment.", "error");
+            });
+        }
+
+        function registerRecentAccess(key) {
+            recentAccessArray = recentAccessArray.filter(item => item !== key);
+            recentAccessArray.unshift(key);
+            if (recentAccessArray.length > 3) recentAccessArray.pop(); // Cap layout tracking list boundary metrics
+            
+            renderRecentAccessPanel();
+        }
+
+        function renderRecentAccessPanel() {
+            const panel = document.getElementById('recentAccessList');
+            if (recentAccessArray.length === 0) {
+                panel.innerHTML = `<div class="text-slate-500 text-center py-4 bg-slate-950/40 rounded-xl border border-slate-900">No identities accessed yet this session</div>`;
+                return;
+            }
+
+            panel.innerHTML = "";
+            recentAccessArray.forEach(key => {
+                const meta = dataMeta[key];
+                const row = document.createElement('div');
+                row.className = "flex justify-between items-center bg-slate-950/50 p-2.5 rounded-xl border border-slate-900/60 hover:border-cyan-500/30 transition-all cursor-pointer";
+                row.onclick = () => focusTargetIdentityCard(key);
+                row.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid ${meta.icon} text-[10px] text-slate-400"></i>
+                        <span class="text-white font-medium">${key.toUpperCase()}</span>
+                    </div>
+                    <span class="text-[9px] bg-slate-900 text-slate-500 px-1.5 py-0.5 rounded border border-slate-800">VIEW</span>
+                `;
+                panel.appendChild(row);
+            });
+        }
+
+        /**
+         * SEARCH ENGINES & REALTIME QUERY PARSING
+         */
+        function handleRealtimeDataLookup(query) {
+            resetInactivityTimer();
+            const target = query.toLowerCase().trim();
+            const cards = document.querySelectorAll('#vaultCardsGrid > div');
+            
+            cards.forEach(card => {
+                const dataKey = card.getAttribute('data-key');
+                if (dataKey.includes(target) || dataMeta[dataKey].label.toLowerCase().includes(target)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        function focusTargetIdentityCard(key) {
+            resetInactivityTimer();
+            const card = document.getElementById(`vault-card-${key}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.remove('glass-panel-neon');
+                void card.offsetWidth; // Reflow reset animation cycle parameters execution
+                card.classList.add('glass-panel-neon');
+                
+                // Temporarily expand visual borders container
+                setTimeout(() => {
+                    card.style.transform = "scale(1.02)";
+                    setTimeout(() => card.style.transform = "none", 300);
+                }, 100);
+            }
+        }
+
+        /**
+         * COMMAND PALETTE SUBSYSTEM CONSOLE OPERATIONS
+         */
+        function toggleCommandPaletteVisibility(show) {
+            const palette = document.getElementById('commandPalette');
+            const searchField = document.getElementById('paletteSearch');
+            
+            if (show && !isLocked) {
+                palette.classList.remove('hidden');
+                palette.classList.add('flex');
+                searchField.value = "";
+                searchField.focus();
+                renderPaletteItemsFiltered("");
+                appendLog("Global orchestration command interface unrolled.");
+            } else {
+                palette.classList.add('hidden');
+                palette.classList.remove('flex');
+            }
+        }
+
+        function renderPaletteItemsFiltered(filterText) {
+            const target = filterText.toLowerCase().trim();
+            const resultsBox = document.getElementById('paletteResults');
+            resultsBox.innerHTML = ""; // Purge list context
+
+            // Generate menu arrays dynamically
+            const commands = [];
+            
+            // Push individual lookup bindings
+            Object.keys(vaultData).forEach(key => {
+                commands.push({
+                    text: `Lookup & Target Field: ${key.toUpperCase()} (${dataMeta[key].label})`,
+                    icon: dataMeta[key].icon,
+                    action: () => { toggleCommandPaletteVisibility(false); focusTargetIdentityCard(key); }
+                });
+            });
+
+            // Push core operational controls
+            commands.push(
+                { text: "System Operation: Secure Vault Lockdown", icon: "fa-lock", action: () => { toggleCommandPaletteVisibility(false); lockVaultRuntime(); } },
+                { text: "System Operation: Destruct Current Terminal Session", icon: "fa-power-off", action: () => { toggleCommandPaletteVisibility(false); clearSessionDestruct(); } }
+            );
+
+            const filtered = commands.filter(cmd => cmd.text.toLowerCase().includes(target));
+
+            if (filtered.length === 0) {
+                resultsBox.innerHTML = `<div class="text-slate-600 text-center py-3">No tracking matches matching operation variables.</div>`;
+                return;
+            }
+
+            filtered.forEach(cmd => {
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-3 p-2.5 rounded-xl hover:bg-cyan-500/10 hover:text-cyan-400 text-slate-300 cursor-pointer transition-colors border border-transparent hover:border-cyan-500/20";
+                item.onclick = cmd.action;
+                item.innerHTML = `<i class="fa-solid ${cmd.icon} w-4 text-center text-slate-500 group-hover:text-cyan-400"></i> <span>${cmd.text}</span>`;
+                resultsBox.appendChild(item);
+            });
+        }
+
+        /**
+         * SYSTEM INTERACTIVE SHORTCUTS & INPUT HANDLERS
+         */
+        function bindSystemInputTriggers() {
+            // Unseal triggering events bound to login
+            document.getElementById('loginBtn').addEventListener('click', handleVaultUnsealAttempt);
+            document.getElementById('pinInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleVaultUnsealAttempt();
+            });
+
+            // Toggle visibility view mode configuration for security masking
+            document.getElementById('togglePinView').addEventListener('click', () => {
+                const pin = document.getElementById('pinInput');
+                const icon = document.querySelector('#togglePinView i');
+                if (pin.type === "password") {
+                    pin.type = "text";
+                    icon.className = "fa-solid fa-eye-slash";
+                } else {
+                    pin.type = "password";
+                    icon.className = "fa-solid fa-eye";
+                }
+            });
+
+            // Sync global lookups search structures across form components
+            const gSearch = document.getElementById('globalSearch');
+            const mSearch = document.getElementById('mobileSearch');
+            
+            gSearch.addEventListener('input', (e) => { handleRealtimeDataLookup(e.target.value); mSearch.value = e.target.value; });
+            mSearch.addEventListener('input', (e) => { handleRealtimeDataLookup(e.target.value); gSearch.value = e.target.value; });
+
+            // Lock commands assigned inline execution environments
+            document.getElementById('lockVaultBtn').addEventListener('click', lockVaultRuntime);
+            document.getElementById('logoutBtn').addEventListener('click', clearSessionDestruct);
+
+            // Realtime palette command text field key handlers logic
+            document.getElementById('paletteSearch').addEventListener('input', (e) => {
+                renderPaletteItemsFiltered(e.target.value);
+            });
+
+            // Catch keystrokes for advanced keyboard interactions profiles
+            window.addEventListener('keydown', (e) => {
+                // Ignore keybind intercepts while booting phase holds UI focus thread
+                if (document.getElementById('bootScreen').classList.contains('hidden') === false) return;
+
+                // ESC Trigger Handler
+                if (e.key === 'Escape') {
+                    if (!document.getElementById('commandPalette').classList.contains('hidden')) {
+                        toggleCommandPaletteVisibility(false);
+                    } else if (!isLocked) {
+                        lockVaultRuntime();
+                    }
+                }
+
+                // Global Intercept Hook for Ctrl + combinations
+                if (e.ctrlKey) {
+                    if (e.key.toLowerCase() === 'k') {
+                        e.preventDefault();
+                        if (!isLocked) toggleCommandPaletteVisibility(true);
+                    }
+                    if (e.key.toLowerCase() === 'f') {
+                        e.preventDefault();
+                        if (!isLocked) {
+                            gSearch.focus();
+                            gSearch.select();
+                        }
+                    }
+                    if (e.key.toLowerCase() === 'l') {
+                        e.preventDefault();
+                        if (!isLocked) clearSessionDestruct();
+                    }
+                }
+            });
+        }
+
+        function resetInactivityTimer() {
+            autoLockCountdown = 300; // Reset matrix back up to 5 minutes configuration
+        }
+
+        /**
+         * RUNTIME TOAST SYSTEM NOTIFICATION HUD UI
+         */
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let typeStyles = "border-cyan-500/30 text-cyan-400";
+            let typeIcon = "fa-circle-check text-cyan-400";
+            
+            if (type === "error") {
+                typeStyles = "border-red-500/30 text-red-400";
+                typeIcon = "fa-triangle-exclamation text-red-400";
+            } else if (type === "warning") {
+                typeStyles = "border-amber-500/30 text-amber-400";
+                typeIcon = "fa-radiation text-amber-400";
+            }
+
+            toast.className = `glass-panel ${typeStyles} py-3 px-4 rounded-xl border flex items-center space-x-3 text-xs font-mono shadow-xl transition-all duration-300 opacity-0 transform translate-y-2 pointer-events-auto max-w-sm`;
+            toast.innerHTML = `<i class="fa-solid ${typeIcon} text-sm"></i> <span class="text-white font-medium">${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            // Force rendering queue flush execution pipeline
+            void toast.offsetWidth;
+            toast.classList.remove('opacity-0', 'translate-y-2');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

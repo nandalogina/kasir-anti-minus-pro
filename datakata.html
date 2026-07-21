@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FER Dictionary Manager Pro+</title>
+    <style>
+      :root {
+        --bg-main: #0f172a;
+        --bg-card: #1e293b;
+        --bg-input: #334155;
+        --border: #475569;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --primary: #0ea5e9;
+        --primary-hover: #0284c7;
+        --success: #10b981;
+        --danger: #f43f5e;
+        --danger-hover: #e11d48;
+        --accent: #f59e0b;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: var(--bg-main);
+        color: var(--text-main);
+        padding: 24px;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .card {
+        background: var(--bg-card);
+        padding: 24px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .control-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      select,
+      input[type="file"]::-webkit-file-upload-button {
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        padding: 10px 14px;
+        border-radius: 8px;
+        outline: none;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+      }
+
+      input[type="file"] {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      input:focus, select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+      }
+
+      .action-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border);
+        margin-bottom: 15px;
+      }
+
+      button {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        background: #475569;
+        color: #fff;
+      }
+
+      button:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .btn-primary { background: var(--primary); }
+      .btn-success { background: var(--success); }
+      .btn-danger { background: var(--danger); }
+      .btn-accent { background: var(--accent); color: #000; }
+
+      .stats {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        display: flex;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 10px 15px;
+        border-radius: 8px;
+        width: fit-content;
+      }
+
+      .stats span {
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      .words {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 10px;
+        max-height: 500px;
+        overflow-y: auto;
+        padding-right: 5px;
+      }
+
+      .words::-webkit-scrollbar {
+        width: 6px;
+      }
+      .words::-webkit-scrollbar-track {
+        background: var(--bg-card);
+      }
+      .words::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+
+      .word-card {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s, border-color 0.2s;
+      }
+
+      .word-card:hover {
+        background: rgba(15, 23, 42, 0.9);
+        border-color: var(--primary);
+      }
+
+      .word-card input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--primary);
+        cursor: pointer;
+      }
+
+      .word-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.95rem;
+      }
+
+      .notice {
+        font-size: 0.85rem;
+        color: var(--accent);
+        margin-top: 10px;
+      }
+
+      /* Badge Style */
+      .badge {
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: auto;
+      }
+      .badge-id {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--success);
+        border: 1px solid var(--success);
+      }
+      .badge-en {
+        background: rgba(14, 165, 233, 0.2);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+      }
+      .badge-unknown {
+        background: rgba(148, 163, 184, 0.2);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h2>📖 FER Dictionary Manager Pro+</h2>
+
+        <div class="control-grid">
+          <div class="control-group">
+            <label for="fileInput">Pilih File Kamus (.txt)</label>
+            <input type="file" id="fileInput" accept=".txt" />
+          </div>
+
+          <div class="control-group">
+            <label for="search">Cari Kata / Kalimat</label>
+            <input type="text" id="search" placeholder="Ketik kata kunci..." />
+          </div>
+
+          <div class="control-group">
+            <label for="mode">Mode Pencarian</label>
+            <select id="mode">
+              <option value="contains">Mengandung</option>
+              <option value="prefix">Awalan (Prefix)</option>
+              <option value="suffix">Akhiran (Suffix)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="maxWords">Batas Maks Kata (Pembersihan)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="maxWords" value="3" min="1" style="width: 100%;" />
+              <button class="btn-accent" onclick="cleanSentences()" title="Bersihkan item yang melebihi batas kata/simbol">🧹 Bersihkan</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn-danger" onclick="deleteFiltered()">🗑️ Hapus Hasil Filter</button>
+          <button id="btnSelectAll" onclick="toggleSelectAll()">☑️ Pilih Semua</button>
+          <button class="btn-danger" onclick="deleteSelected()">🗑️ Hapus Terpilih</button>
+          <button onclick="undoDelete()">↩️ Urungkan (Undo)</button>
+          <button class="btn-success" style="margin-left: auto;" onclick="exportTxt()">📤 Export .TXT</button>
+        </div>
+
+        <div class="stats">
+          <div>Total Entri: <span id="total">0</span></div>
+          <div>Hasil Filter: <span id="result">0</span></div>
+        </div>
+        <div id="notice" class="notice"></div>
+      </div>
+
+      <div class="card">
+        <div id="words" class="words"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { franc } from 'https://esm.sh/franc-min@6';
+
+      let words = [];
+      let backup = null;
+      let allSelected = false;
+
+      // Fungsi Analisis AI Otomatis menggunakan Franc NLP Engine
+      function analisaBahasaAI(teks) {
+        let t = teks.trim();
+        if (!t) return { kode: "??", class: "badge-unknown" };
+
+        // Panggil AI model untuk mendeteksi ISO 639-3 language code
+        let kodeBahasa = franc(t, { minLength: 2 }); 
+
+        if (kodeBahasa === 'ind') return { kode: "ID", class: "badge-id" };
+        if (kodeBahasa === 'eng') return { kode: "EN", class: "badge-en" };
+        
+        // Kembalikan objek tidak diketahui jika model mendeteksi bahasa lain/ragu (und)
+        return { kode: "??", class: "badge-unknown" };
+      }
+
+      // Event listener untuk input file
+      document.getElementById("fileInput").addEventListener("change", (e) => {
+        const f = e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = (ev) => {
+          words = [
+            ...new Set(
+              ev.target.result
+                .split(/\r?\n/)
+                .map((v) => v.trim())
+                .filter(Boolean),
+            ),
+          ];
+          allSelected = false;
+          updateSelectButtonText();
+          render();
+        };
+        r.readAsText(f);
+      });
+
+      document.getElementById("search").addEventListener("input", render);
+      document.getElementById("mode").addEventListener("change", render);
+
+      function filtered() {
+        let q = document.getElementById("search").value.toLowerCase().trim();
+        let m = document.getElementById("mode").value;
+        if (!q) return words;
+
+        if (m === "prefix")
+          return words.filter((x) => x.toLowerCase().startsWith(q));
+        if (m === "suffix")
+          return words.filter((x) => x.toLowerCase().endsWith(q));
+        return words.filter((x) => x.toLowerCase().includes(q));
+      }
+
+      function render() {
+        let data = filtered();
+        document.getElementById("total").textContent = words.length;
+        document.getElementById("result").textContent = data.length;
+
+        let box = document.getElementById("words");
+        let noticeBox = document.getElementById("notice");
+        box.innerHTML = "";
+        
+        let limit = 1000;
+        let visibleData = data.slice(0, limit);
+
+        if (data.length > limit) {
+          noticeBox.textContent = `⚠️ Menampilkan ${limit} dari ${data.length} hasil untuk menjaga performa browser tetap lancar.`;
+        } else {
+          noticeBox.textContent = "";
+        }
+
+        visibleData.forEach((w) => {
+          let d = document.createElement("div");
+          d.className = "word-card";
+          
+          // Proses analisis berjalan otomatis di sini secara realtime
+          let bahasa = analisaBahasaAI(w);
+
+          d.onclick = (e) => {
+            if(e.target.tagName !== 'INPUT') {
+              let cb = d.querySelector(".cb");
+              cb.checked = !cb.checked;
+            }
+          };
+
+          d.innerHTML = `
+            <input type="checkbox" class="cb" value="${encodeURIComponent(w)}"> 
+            <span class="word-text" title="${w}">${w}</span>
+            <span class="badge ${bahasa.class}">${bahasa.kode}</span>
+          `;
+          box.appendChild(d);
+        });
+      }
+
+      function cleanSentences() {
+        let max = parseInt(document.getElementById("maxWords").value) || 3;
+        if(words.length === 0) return alert("Kamus kosong. Silakan upload file terlebih dahulu.");
+
+        backup = [...words];
+        
+        words = words.filter(item => {
+          let cleanItem = item.trim();
+          const jumlahKata = cleanItem.split(/\s+/).filter(Boolean).length;
+          const hanyaHurufDanSpasi = /^[a-zA-ZÀ-ÿ\s\-']+$/.test(cleanItem);
+
+          return jumlahKata <= max && hanyaHurufDanSpasi;
+        });
+
+        render();
+        alert(`Pembersihan selesai! Berhasil menyaring baris yang memiliki maksimal ${max} kata.`);
+      }
+
+      function deleteFiltered() {
+        let data = filtered();
+        if(data.length === 0) return;
+        if(!confirm(`Hapus semua (${data.length}) item dalam filter saat ini?`)) return;
+
+        backup = [...words];
+        let s = new Set(data);
+        words = words.filter((x) => !s.has(x));
+        render();
+      }
+
+      function toggleSelectAll() {
+        const checkboxes = document.querySelectorAll(".cb");
+        allSelected = !allSelected;
+        checkboxes.forEach((x) => (x.checked = allSelected));
+        updateSelectButtonText();
+      }
+
+      function updateSelectButtonText() {
+        const btn = document.getElementById("btnSelectAll");
+        btn.textContent = allSelected ? "⬜ Batal Pilih Semua" : "☑️ Pilih Semua";
+      }
+
+      function deleteSelected() {
+        let selected = [...document.querySelectorAll(".cb:checked")].map((x) =>
+          decodeURIComponent(x.value),
+        );
+        if(selected.length === 0) return alert("Tidak ada kata yang dipilih.");
+
+        backup = [...words];
+        let s = new Set(selected);
+        words = words.filter((x) => !s.has(x));
+        allSelected = false;
+        updateSelectButtonText();
+        render();
+      }
+
+      function undoDelete() {
+        if (!backup) return alert("Tidak ada riwayat aksi yang bisa di-undo.");
+        words = [...backup];
+        backup = null;
+        render();
+        alert("Aksi terakhir berhasil diurungkan.");
+      }
+
+      function exportTxt() {
+        if(words.length === 0) return alert("Tidak ada data untuk di-export.");
+        let blob = new Blob([words.join("\n")], { type: "text/plain;charset=utf-8" });
+        let a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "fer_cleaned_dictionary.txt";
+        a.click();
+      }
+
+      // Hubungkan fungsi modul ke scope window agar onclick HTML tetap berfungsi
+      window.cleanSentences = cleanSentences;
+      window.deleteFiltered = deleteFiltered;
+      window.toggleSelectAll = toggleSelectAll;
+      window.deleteSelected = deleteSelected;
+      window.undoDelete = undoDelete;
+      window.exportTxt = exportTxt;
+    </script>
+  </body>
+</html>

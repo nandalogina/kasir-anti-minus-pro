@@ -1,817 +1,1075 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>Nanda</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/file-saver/dist/FileSaver.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Nanda POS & Cashier System</title>
 
-  <style>
-    :root {
-      --primary: #6366f1;
-      --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
-      --success-gradient: linear-gradient(135deg, #10b981, #059669);
-      --warning-gradient: linear-gradient(135deg, #f59e0b, #d97706);
-      --success: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --bg: #050816;
-      --card-bg: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #ffffff;
-      --gray: #94a3b8;
-      --light-gray: rgba(255, 255, 255, 0.15);
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver/dist/FileSaver.min.js"></script>
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    html { scroll-behavior: smooth; }
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+        --success-gradient: linear-gradient(135deg, #10b981, #059669);
+        --warning-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --bg: #050816;
+        --card-bg: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #ffffff;
+        --gray: #94a3b8;
+        --light-gray: rgba(255, 255, 255, 0.15);
+      }
 
-    body { 
-      background: 
-        radial-gradient(circle at top left, #8b5cf6, transparent 35%),
-        radial-gradient(circle at bottom right, #06b6d4, transparent 35%),
-        var(--bg);
-      color: var(--text);
-      min-height: 100vh; 
-      overflow-x: hidden;
-      display: flex; 
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
 
-    /* Background Effects */
-    .cyber-grid {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -5;
-    }
+      html {
+        scroll-behavior: smooth;
+      }
 
-    .blob {
-      position: fixed;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: .25;
-      z-index: -4;
-      animation: blobFloat 12s ease-in-out infinite;
-    }
-    .blob1 { top: -100px; left: -100px; background: #8b5cf6; }
-    .blob2 { bottom: -100px; right: -100px; background: #06b6d4; }
+      body {
+        background:
+          radial-gradient(circle at top left, #8b5cf6, transparent 35%),
+          radial-gradient(circle at bottom right, #06b6d4, transparent 35%),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+      }
 
-    .particles { position: fixed; inset: 0; pointer-events: none; z-index: -3; }
-    .particles span {
-      position: absolute; width: 5px; height: 5px; border-radius: 50%;
-      background: rgba(255,255,255,0.3); animation: particleFloat linear infinite;
-    }
-    .particles span:nth-child(1){left:10%;animation-duration:12s;}
-    .particles span:nth-child(2){left:25%;animation-duration:16s;}
-    .particles span:nth-child(3){left:40%;animation-duration:18s;}
-    .particles span:nth-child(4){left:55%;animation-duration:14s;}
-    .particles span:nth-child(5){left:70%;animation-duration:20s;}
-    .particles span:nth-child(6){left:85%;animation-duration:17s;}
+      .cyber-grid {
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -5;
+      }
 
-    .cursor-glow {
-      position: fixed; width: 220px; height: 220px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(139,92,246,.2), transparent 70%);
-      pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: screen;
-    }
+      .blob {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.25;
+        z-index: -4;
+        animation: blobFloat 12s ease-in-out infinite;
+      }
+      .blob1 { top: -100px; left: -100px; background: #8b5cf6; }
+      .blob2 { bottom: -100px; right: -100px; background: #06b6d4; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade { animation: fadeIn 0.6s ease forwards; }
+      .particles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -3;
+      }
+      .particles span {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        animation: particleFloat linear infinite;
+      }
+      .particles span:nth-child(1) { left: 10%; animation-duration: 12s; }
+      .particles span:nth-child(2) { left: 25%; animation-duration: 16s; }
+      .particles span:nth-child(3) { left: 40%; animation-duration: 18s; }
+      .particles span:nth-child(4) { left: 55%; animation-duration: 14s; }
+      .particles span:nth-child(5) { left: 70%; animation-duration: 20s; }
+      .particles span:nth-child(6) { left: 85%; animation-duration: 17s; }
 
-    /* Sidebar */
-    .sidebar { 
-      width: 285px; background: rgba(5, 8, 22, 0.6); backdrop-filter: blur(20px); 
-      padding: 30px 20px; position: fixed; height: 100vh; 
-      overflow-y: auto; border-right: 1px solid var(--border); z-index: 10; transition: width 0.3s;
-    }
-    .sidebar h2 { 
-      font-size: 26px; margin-bottom: 50px; text-align: center; font-weight: 800; 
-      letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 12px;
-    }
-    .sidebar h2 i { color: #fde047; }
-    .sidebar ul { list-style: none; }
-    .sidebar li { 
-      padding: 16px 20px; margin-bottom: 12px; border-radius: 16px; cursor: pointer; 
-      transition: all 0.3s ease; font-weight: 500; display: flex; align-items: center; 
-      gap: 16px; color: var(--gray);
-    }
-    .sidebar li i { font-size: 18px; width: 20px; text-align: center; }
-    .sidebar li:hover { 
-      background: rgba(255, 255, 255, 0.05); color: white; transform: translateX(5px);
-    }
-    .sidebar li.active { 
-      background: var(--primary-gradient); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); 
-    }
+      .cursor-glow {
+        position: fixed;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent 70%);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: screen;
+        display: none;
+      }
 
-    /* Content Area */
-    .content { 
-      margin-left: 285px; flex: 1; padding: 40px 50px; max-width: calc(100% - 285px); transition: margin-left 0.3s, max-width 0.3s;
-    }
-    .header-title { 
-      margin-bottom: 35px; font-size: 34px; font-weight: 700; color: white; display: flex; align-items: center; gap: 15px;
-    }
-    .page { display: none; }
-    .page.active-page { display: block; }
+      @media (pointer: fine) {
+        .cursor-glow { display: block; }
+      }
 
-    /* Stats Grid */
-    .stats-grid { 
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; 
-    }
-    .stat-card { 
-      background: var(--card-bg); border: 1px solid var(--border); backdrop-filter: blur(20px);
-      padding: 30px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
-      display: flex; align-items: center; gap: 25px; transition: transform 0.3s;
-    }
-    .stat-card:hover { transform: translateY(-5px); }
-    .stat-card .icon { 
-      width: 65px; height: 65px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-    .icon-blue { background: var(--primary-gradient); }
-    .icon-green { background: var(--success-gradient); }
-    .stat-card .info p { font-size: 14px; color: var(--gray); margin-bottom: 5px; font-weight: 500; }
-    .stat-card .info h3 { font-size: 28px; color: white; font-weight: 700; }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade {
+        animation: fadeIn 0.6s ease forwards;
+      }
 
-    /* Animated Cyber Card */
-    .card { 
-      position: relative; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border);
-      padding: 35px; border-radius: 24px; margin-bottom: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; animation: fadeUp .6s ease;
-    }
-    .card::before {
-      content: ""; position: absolute; inset: -2px; background: conic-gradient(from 0deg, #8b5cf6, #06b6d4, #ec4899, #8b5cf6);
-      z-index: -2; animation: rotateBorder 6s linear infinite;
-    }
-    .card::after {
-      content: ""; position: absolute; inset: 1px; background: rgba(5, 8, 22, 0.93); border-radius: 23px; z-index: -1;
-    }
-    
-    /* Card Special Border modification */
-    .card-special::before {
-      background: conic-gradient(from 0deg, #f59e0b, #d97706, #f59e0b);
-    }
+      /* Sidebar */
+      .sidebar {
+        width: 285px;
+        background: rgba(5, 8, 22, 0.6);
+        backdrop-filter: blur(20px);
+        padding: 30px 20px;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        z-index: 10;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .sidebar h2 {
+        font-size: 20px;
+        margin-bottom: 50px;
+        text-align: center;
+        font-weight: 800;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      .sidebar h2 i { color: #fde047; }
+      .sidebar ul { list-style: none; }
+      .sidebar li {
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--gray);
+      }
+      .sidebar li i { font-size: 18px; width: 20px; text-align: center; }
+      .sidebar li:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        transform: translateX(5px);
+      }
+      .sidebar li.active {
+        background: var(--primary-gradient);
+        color: white;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      }
 
-    .card-header { 
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; 
-      border-bottom: 1px solid var(--border); padding-bottom: 20px; 
-    }
-    .card-header h2 { font-size: 22px; color: white; display: flex; align-items: center; gap: 12px; font-weight: 600;}
-    .card-header h2 i { color: #8b5cf6; }
-    .card-special .card-header h2 i { color: var(--warning); }
+      /* Content Area */
+      .content {
+        margin-left: 285px;
+        flex: 1;
+        padding: 40px 50px;
+        max-width: calc(100% - 285px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .header-title {
+        margin-bottom: 35px;
+        font-size: 34px;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .page { display: none; }
+      .page.active-page { display: block; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-    .input-group { display: flex; flex-direction: column; position: relative; }
-    .input-group label { margin-bottom: 10px; font-size: 14px; font-weight: 500; color: var(--gray); }
-    
-    input, select { 
-      padding: 15px 20px; border: 1px solid var(--border); border-radius: 14px; font-size: 16px; 
-      background: rgba(255, 255, 255, 0.05); color: white; font-weight: 600; transition: all 0.3s; outline: none;
-    }
-    input:focus, select:focus { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.35); }
-    .main-input input { font-size: 20px; padding: 16px 20px; border-color: rgba(139, 92, 246, 0.4); color: #a5b4fc; }
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+      .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(20px);
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        transition: transform 0.3s;
+      }
+      .stat-card:hover { transform: translateY(-5px); }
+      .stat-card .icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: white;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .icon-blue { background: var(--primary-gradient); }
+      .icon-green { background: var(--success-gradient); }
+      .stat-card .info p { font-size: 14px; color: var(--gray); margin-bottom: 5px; font-weight: 500; }
+      .stat-card .info h3 { font-size: 24px; color: white; font-weight: 700; }
 
-    .btn-group { display: flex; gap: 15px; margin-top: 35px; flex-wrap: wrap; }
-    button { 
-      padding: 14px 28px; border: none; border-radius: 14px; cursor: pointer; font-size: 15px; font-weight: 600; 
-      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; color: white;
-    }
-    .btn-primary { background: var(--primary-gradient); }
-    .btn-warning { background: var(--warning-gradient); }
-    .btn-success { background: var(--success-gradient); }
-    .btn-outline { background: transparent; border: 1px solid #8b5cf6; color: #a5b4fc; }
-    .btn-outline:hover { background: rgba(139, 92, 246, 0.1); }
+      /* Animated Cyber Card */
+      .card {
+        position: relative;
+        background: rgba(5, 8, 22, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        padding: 35px;
+        border-radius: 24px;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+      }
+      .card-header h2 {
+        font-size: 22px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+      }
+      .card-header h2 i { color: #8b5cf6; }
+      .card-special .card-header h2 i { color: var(--warning); }
 
-    /* Drawer Grid Style */
-    .stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px; }
-    .stock-item { 
-      background: rgba(255, 255, 255, 0.03); padding: 20px 15px; border-radius: 18px; text-align: center; border: 1px solid var(--border);
-      transition: all 0.3s; position: relative; overflow: hidden;
-    }
-    .stock-item::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--primary-gradient); opacity: 0; transition: 0.3s; }
-    .stock-item:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.06); box-shadow: 0 8px 25px rgba(139,92,246,0.15); }
-    .stock-item:hover::before { opacity: 1; }
-    .stock-item h4 { font-size: 14px; color: var(--gray); margin-bottom: 8px; font-weight: 500;}
-    .stock-item p { font-size: 24px; font-weight: 700; color: white; }
-    .stock-item p span { color: #8b5cf6; font-size: 16px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .input-group label {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--gray);
+      }
 
-    /* Table Cyberpunk */
-    .table-container { overflow-x: auto; margin-top: 20px; }
-    table { width: 100%; border-collapse: collapse; background: transparent; border-radius: 16px; overflow: hidden; }
-    th { background: rgba(255, 255, 255, 0.07); padding: 16px; font-weight: 600; color: white; text-align: left; border-bottom: 1px solid var(--border); }
-    td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--gray); }
-    tr:hover td { color: white; background: rgba(255, 255, 255, 0.01); }
-    .search-box { display: flex; gap: 15px; margin-bottom: 25px; align-items: center; }
-    .search-box input { flex: 1; }
-    .badge { background: var(--primary-gradient); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+      input, select {
+        padding: 15px 20px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s;
+        outline: none;
+      }
+      input:focus, select:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+      }
+      .main-input input {
+        font-size: 20px;
+        padding: 16px 20px;
+        border-color: rgba(139, 92, 246, 0.4);
+        color: #a5b4fc;
+      }
 
-    /* Result Box Panel */
-    .result-box {
-      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-top: 25px; display: flex; flex-wrap: wrap; gap: 30px; align-items: center;
-    }
-    .result-item { flex: 1; min-width: 200px; }
-    .result-item p { font-size: 14px; color: var(--gray); margin-bottom: 8px; }
-    .result-item h3 { font-size: 28px; color: white; font-weight: 700; }
-    
-    /* Breakdown Style */
-    .modal-breakdown-group {
-      background: rgba(245, 158, 11, 0.04); border-left: 4px solid #f59e0b; padding: 14px 18px; margin-bottom: 18px; border-radius: 14px; border-top: 1px solid rgba(245, 158, 11, 0.1); border-right: 1px solid rgba(245, 158, 11, 0.1); border-bottom: 1px solid rgba(245, 158, 11, 0.1);
-    }
-    .group-title { font-weight: 700; color: #fbbf24; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 1px dashed rgba(251, 191, 36, 0.2); padding-bottom: 4px; display: inline-block; }
-    .denom-line { font-family: monospace; font-size: 15px; padding: 5px 0; display: flex; justify-content: space-between; color: #e2e8f0; }
-    .group-total { margin-top: 10px; font-weight: 700; color: white; background: rgba(245, 158, 11, 0.2); display: inline-block; padding: 4px 14px; border-radius: 24px; font-size: 13px; }
-    
-    .swal-scroll { max-height: 65vh; overflow-y: auto; padding-right: 8px; text-align: left; }
-    .swal2-popup.cyber-swal { background: #0b0f19 !important; border: 1px solid rgba(139, 92, 246, 0.3) !important; color: white !important; border-radius: 24px !important; }
-    .swal2-title { color: white !important; }
-    
-    hr { margin: 20px 0; border: none; border-top: 1px solid var(--border); }
+      .btn-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 35px;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 14px 28px;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: white;
+      }
+      .btn-primary { background: var(--primary-gradient); }
+      .btn-warning { background: var(--warning-gradient); }
+      .btn-success { background: var(--success-gradient); }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid #8b5cf6;
+        color: #a5b4fc;
+      }
+      .btn-outline:hover { background: rgba(139, 92, 246, 0.1); }
 
-    /* Animations Keyframes */
-    @keyframes blobFloat {
-      0% { transform: translate(0,0); }
-      50% { transform: translate(40px,-30px); }
-      100% { transform: translate(0,0); }
-    }
-    @keyframes rotateBorder {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes particleFloat {
-      from { transform: translateY(100vh); opacity: 0; }
-      to { transform: translateY(-10vh); opacity: 1; }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+      /* Drawer Grid Style */
+      .stock-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 18px;
+      }
+      .stock-item {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 20px 15px;
+        border-radius: 18px;
+        text-align: center;
+        border: 1px solid var(--border);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .stock-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--primary-gradient);
+        opacity: 0;
+        transition: 0.3s;
+      }
+      .stock-item:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+      }
+      .stock-item:hover::before { opacity: 1; }
+      .stock-item h4 { font-size: 14px; color: var(--gray); margin-bottom: 8px; font-weight: 500; }
+      .stock-item p { font-size: 22px; font-weight: 700; color: white; }
+      .stock-item p span { color: #8b5cf6; font-size: 16px; }
 
-    @media (max-width: 1024px) {
-      .sidebar { width: 90px; padding: 30px 15px; }
-      .sidebar h2 span, .sidebar li span { display: none; }
-      .sidebar li { justify-content: center; padding: 15px; }
-      .content { margin-left: 90px; max-width: calc(100% - 90px); padding: 30px; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="cyber-grid"></div>
-<div class="blob blob1"></div>
-<div class="blob blob2"></div>
-
-<div class="particles">
-  <span></span><span></span><span></span><span></span><span></span><span></span>
-</div>
-
-<div class="cursor-glow"></div>
-
-<div class="sidebar">
-  <h2><i class="fa-solid fa-bolt" style="color: #fde047;"></i> <span>nandadotcssdotpy</span></h2>
-  <ul>
-    <li class="active" data-page="dashboard"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></li>
-    <li data-page="transaksi"><i class="fa-solid fa-cart-shopping"></i> <span>Transaksi</span></li>
-    <li data-page="hitungpenjualan"><i class="fa-solid fa-calculator"></i> <span>Hitung Penjualan</span></li>
-    <li data-page="stokbarang"><i class="fa-solid fa-boxes-stacked"></i> <span>Stok Barang</span></li>
-    <li data-page="tutupkasir"><i class="fa-solid fa-scale-balanced"></i> <span>Tutup Kasir</span></li>
-  </ul>
-</div>
-
-<div class="content">
-  <div id="dashboard" class="page active-page">
-    <h1 class="header-title animate-fade">Dashboard</h1>
-    <div class="stats-grid animate-fade">
-      <div class="stat-card">
-        <div class="icon icon-blue"><i class="fa-solid fa-cash-register"></i></div>
-        <div class="info"><p>Total Kas Laci</p><h3 id="statKas">Rp 0</h3></div>
-      </div>
-      <div class="stat-card">
-        <div class="icon icon-green"><i class="fa-solid fa-arrow-trend-up"></i></div>
-        <div class="info"><p>Total Penjualan Shift</p><h3 id="statPenjualan">Rp 0</h3></div>
-      </div>
-    </div>
-    <div class="card animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-vault"></i> Rincian Isi Laci</h2></div>
-      <div class="stock-grid" id="drawerStock"></div>
-    </div>
-  </div>
-
-  <div id="transaksi" class="page">
-    <h1 class="header-title animate-fade">🧾 Transaksi Pelanggan</h1>
-    <div class="card animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-bag-shopping"></i> Proses Pembayaran</h2></div>
-      <div class="input-group main-input" style="margin-bottom:30px; max-width:350px;">
-        <label>Total Belanja (Rp)</label>
-        <input type="number" id="totalBelanja" placeholder="45000">
-      </div>
-      <h3 style="font-size:15px; margin-bottom:20px; color:#a5b4fc;"><i class="fa-regular fa-money-bill-1"></i> Uang Diterima</h3>
-      <div class="grid" id="bayarInputs"></div>
-      <div class="btn-group">
-        <button class="btn-primary magnetic" onclick="prosesPembayaran()"><i class="fa-solid fa-check-circle"></i> Bayar</button>
-        <button class="btn-outline magnetic" onclick="resetInputs('bayarInputs'); document.getElementById('totalBelanja').value='';">Reset</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="hitungpenjualan" class="page">
-    <h1 class="header-title animate-fade">📊 Hitung Uang Penjualan</h1>
-    <div class="card animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-receipt"></i> Input Fisik Uang di Laci</h2></div>
-      <p style="font-size:14px; color:var(--gray); margin-bottom:20px;">
-        Hitung jumlah lembar/keping uang yang ada di laci saat ini untuk mengetahui total penjualan bersih.
-      </p>
+      /* Table Cyberpunk */
+      .table-container { overflow-x: auto; margin-top: 20px; }
+      table { width: 100%; border-collapse: collapse; background: transparent; border-radius: 16px; overflow: hidden; }
+      th { background: rgba(255, 255, 255, 0.07); padding: 16px; font-weight: 600; color: white; text-align: left; border-bottom: 1px solid var(--border); }
+      td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); color: var(--gray); }
+      tr:hover td { color: white; background: rgba(255, 255, 255, 0.01); }
       
-      <div class="input-group main-input" style="margin-bottom:30px; max-width:350px;">
-        <label>Modal Awal Hari Ini (Rp)</label>
-        <input type="number" id="modalAwalHarian" placeholder="Contoh: 150000">
-      </div>
+      .search-box { display: flex; gap: 15px; margin-bottom: 25px; align-items: center; }
+      .search-box input { flex: 1; }
+      .badge { background: var(--primary-gradient); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
 
-      <h3 style="font-size:15px; margin-bottom:20px; color:#a5b4fc; font-weight:600;">
-        <i class="fa-solid fa-boxes-stacked"></i> Hitung Fisik Uang di Laci Sekarang:
-      </h3>
-      <div class="grid" id="fisikPenjualanInputs"></div>
-
-      <div class="btn-group">
-        <button class="btn-primary magnetic" onclick="hitungPenjualanBersih()">
-          <i class="fa-solid fa-calculator"></i> Hitung Penjualan
-        </button>
-        <button class="btn-outline magnetic" onclick="resetInputs('fisikPenjualanInputs'); document.getElementById('modalAwalHarian').value=''; document.getElementById('hasilBox').style.display='none';">
-          <i class="fa-solid fa-rotate-left"></i> Reset
-        </button>
-      </div>
-
-      <div id="hasilBox" class="result-box" style="display: none;">
-        <div class="result-item">
-          <p><i class="fa-solid fa-wallet"></i> Total Uang Fisik</p>
-          <h3 id="totalFisikDisplay">Rp 0</h3>
-        </div>
-        <div class="result-item">
-          <p><i class="fa-solid fa-arrow-down"></i> Modal Awal</p>
-          <h3 id="modalDisplay">Rp 0</h3>
-        </div>
-        <div class="result-item" style="border-left: 3px solid var(--success); padding-left: 25px;">
-          <p><i class="fa-solid fa-chart-line"></i> Estimasi Penjualan Bersih</p>
-          <h3 id="penjualanBersihDisplay" style="color: var(--success);">Rp 0</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="stokbarang" class="page">
-    <h1 class="header-title animate-fade">📦 Manajemen Stok Barang</h1>
-    <div class="card animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-list-check"></i> Daftar Stok Barang</h2></div>
-      <div class="search-box">
-        <input type="text" id="searchStok" placeholder="🔍 Cari berdasarkan nama, kode, atau lokasi..." oninput="tampilkanStokBarang()">
-         <button class="btn-success magnetic" onclick="exportToExcel()">
-    <i class="fa-solid fa-file-excel"></i> Export Excel
-  </button>
-        <button class="btn-primary magnetic" onclick="tampilkanStokBarang()"><i class="fa-solid fa-magnifying-glass"></i></button>
-      </div>
-      <div class="table-container">
-        <table id="tabelStok">
-          <thead><tr><th>Barang</th><th>Kode</th><th>Jumlah</th><th>Lokasi</th><th>Aksi</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div style="margin-top:35px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border); padding:25px; border-radius:20px;">
-        <h3 style="margin-bottom:20px; color: white;"><i class="fa-solid fa-plus-circle"></i> Tambah / Update Stok</h3>
-        <div class="grid">
-          <div class="input-group"><label>Nama Barang</label><input type="text" id="namaBarang" placeholder="Indomie Goreng"></div>
-          <div class="input-group"><label>Kode Barang</label><input type="text" id="kodeBarang" placeholder="IG001"></div>
-          <div class="input-group"><label>Jumlah</label><input type="number" id="jumlahBarang" value="1"></div>
-          <div class="input-group"><label>Lokasi Simpan</label><input type="text" id="lokasiBarang" placeholder="Rak A1"></div>
-        </div>
-        <button class="btn-success magnetic" style="margin-top:20px;" onclick="tambahBarang()"><i class="fa-solid fa-save"></i> Simpan ke Stok</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="tutupkasir" class="page">
-    <h1 class="header-title animate-fade">🔐 Tutup Shift & Pisah Modal</h1>
-    <div class="card card-special animate-fade">
-      <div class="card-header"><h2><i class="fa-solid fa-scale-balanced"></i> Rekap & Pisah Modal</h2></div>
-      <div class="input-group main-input" style="margin-bottom:30px; max-width:350px;">
-        <label>Target Modal Besok (Rp)</label>
-        <input type="number" id="targetModal" placeholder="150000">
-      </div>
-      <h3 style="font-size:15px; margin-bottom:20px; color:var(--warning);">Fisik Uang di Laci:</h3>
-      <div class="grid" id="fisikInputs"></div>
-      <div class="btn-group">
-        <button class="btn-warning magnetic" onclick="hitungPemisahanModal()"><i class="fa-solid fa-wand-magic-sparkles"></i> Pisahkan</button>
-        <button class="btn-outline magnetic" onclick="resetInputs('fisikInputs'); document.getElementById('targetModal').value='';">Reset</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  const pecahan = [100000, 50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100];
-  let stokUang = {};
-  let stats = { totalPenjualan: 0 };
-  let dataStokBarang = [];
-
-  const formatRp = (angka) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(angka);
-
-  // Custom configuration for SweetAlert Cyber Theme
-  const fireCyberAlert = (options) => {
-    return Swal.fire({
-      ...options,
-      background: '#0b0f19',
-      color: '#ffffff',
-      confirmButtonColor: '#6366f1',
-      cancelButtonColor: '#ef4444',
-      customClass: {
-        popup: 'cyber-swal'
+      /* Result Box Panel */
+      .result-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        padding: 25px;
+        border-radius: 20px;
+        margin-top: 25px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: center;
       }
-    });
-  };
+      .result-item { flex: 1; min-width: 200px; }
+      .result-item p { font-size: 14px; color: var(--gray); margin-bottom: 8px; }
+      .result-item h3 { font-size: 26px; color: white; font-weight: 700; }
 
-  function initPecahanInputs() {
-    document.getElementById("bayarInputs").innerHTML = '';
-    document.getElementById("fisikInputs").innerHTML = '';
-    document.getElementById("fisikPenjualanInputs").innerHTML = '';
-    
-    pecahan.forEach(nominal => {
-      if (!stokUang[nominal]) stokUang[nominal] = 0;
-      let icon = nominal >= 1000 ? '<i class="fa-regular fa-money-bill-1"></i>' : '<i class="fa-solid fa-coins"></i>';
-      document.getElementById("bayarInputs").innerHTML += `<div class="input-group"><label>${icon} Rp ${nominal.toLocaleString("id-ID")}</label><input type="number" min="0" id="bayar_${nominal}" value="0"></div>`;
-      document.getElementById("fisikInputs").innerHTML += `<div class="input-group"><label>${icon} Rp ${nominal.toLocaleString("id-ID")}</label><input type="number" min="0" id="fisik_${nominal}" value="0"></div>`;
-      document.getElementById("fisikPenjualanInputs").innerHTML += `<div class="input-group"><label>${icon} Rp ${nominal.toLocaleString("id-ID")}</label><input type="number" min="0" id="fisikJual_${nominal}" value="0"></div>`;
-    });
-    updateDashboard();
-    initMagneticButtons();
-  }
-
-  function updateDashboard() {
-    let totalKas = 0;
-    document.getElementById("drawerStock").innerHTML = '';
-    pecahan.forEach(nominal => {
-      totalKas += nominal * (stokUang[nominal] || 0);
-      document.getElementById("drawerStock").innerHTML += `<div class="stock-item"><h4>Rp ${nominal.toLocaleString("id-ID")}</h4><p>${stokUang[nominal] || 0} <span>x</span></p></div>`;
-    });
-    document.getElementById("statKas").innerText = formatRp(totalKas);
-    document.getElementById("statPenjualan").innerText = formatRp(stats.totalPenjualan);
-  }
-
-  function prosesPembayaran() {
-    const totalBelanja = parseInt(document.getElementById("totalBelanja").value) || 0;
-    if (totalBelanja <= 0) return fireCyberAlert({icon:'error', title:'Oops', text:'Total belanja harus diisi!'});
-    let totalBayar = 0, tempStok = {...stokUang};
-    pecahan.forEach(n => {
-      const jml = parseInt(document.getElementById(`bayar_${n}`).value) || 0;
-      totalBayar += n * jml;
-      tempStok[n] += jml;
-    });
-    if (totalBayar < totalBelanja) return fireCyberAlert({icon:'warning', title:'Uang Kurang', text:`Kurang ${formatRp(totalBelanja-totalBayar)}`});
-    let kembalian = totalBayar - totalBelanja, sisa = kembalian;
-    if (kembalian > 0) {
-      for (let n of pecahan) {
-        while (sisa >= n && tempStok[n] > 0) { sisa -= n; tempStok[n]--; }
+      /* Update Form Area Styles Fix */
+      .stok-form-container {
+        margin-top: 35px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px dashed var(--border);
+        padding: 25px;
+        border-radius: 20px;
       }
-      if (sisa > 0) return fireCyberAlert({icon:'error', title:'Gagal', text:'Pecahan di laci tidak pas untuk kembalian.'});
-    }
-    stokUang = tempStok;
-    stats.totalPenjualan += totalBelanja;
-    fireCyberAlert({icon:'success', title:'Pembayaran Sukses', html:`Kembalian: <b style="color:#10b981; font-size: 1.2rem;">${formatRp(kembalian)}</b>`});
-    updateDashboard();
-    resetInputs('bayarInputs');
-    document.getElementById("totalBelanja").value = '';
-  }
-
-  function hitungPenjualanBersih() {
-    const modalAwal = parseInt(document.getElementById("modalAwalHarian").value) || 0;
-    let totalFisik = 0;
-    pecahan.forEach(nominal => { totalFisik += nominal * (parseInt(document.getElementById(`fisikJual_${nominal}`).value) || 0); });
-    const penjualanBersih = totalFisik - modalAwal;
-    document.getElementById("totalFisikDisplay").innerText = formatRp(totalFisik);
-    document.getElementById("modalDisplay").innerText = formatRp(modalAwal);
-    document.getElementById("penjualanBersihDisplay").innerText = formatRp(penjualanBersih > 0 ? penjualanBersih : 0);
-    document.getElementById("hasilBox").style.display = "flex";
-    if (penjualanBersih < 0) fireCyberAlert({icon: 'warning', title: 'Perhatian', text: 'Total fisik lebih kecil dari modal awal. Ada selisih minus!', confirmButtonColor: '#f59e0b'});
-  }
-
-  function buildModalBreakdownHTML(modalCounts, targetAmount) {
-    if (targetAmount <= 0) return "<p>Tidak ada modal</p>";
-    let countsCopy = {...modalCounts};
-    const chunkValue = 100000;
-    let remainingTarget = targetAmount;
-    let groupIndex = 1;
-    let groupsHTML = '';
-    
-    while (remainingTarget > 0) {
-      let currentChunk = Math.min(remainingTarget, chunkValue);
-      let chunkRemaining = currentChunk;
-      let usedInGroup = {};
       
-      for (let denom of pecahan) {
-        while (chunkRemaining >= denom && countsCopy[denom] > 0) {
-          countsCopy[denom]--;
-          chunkRemaining -= denom;
-          usedInGroup[denom] = (usedInGroup[denom] || 0) + 1;
-        }
-        if (chunkRemaining === 0) break;
+      /* Hide standard inner arrows for numerical input */
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
       }
-      if (chunkRemaining !== 0) {
-        groupsHTML += `<div class="modal-breakdown-group"><div class="group-title" style="color:#ef4444;">⚠️ Blok tidak presisi</div><p style="font-size:13px; color:#cbd5e1;">Gagal menyusun pecahan pas otomatis, tinjau fisik uang kembali.</p></div>`;
-        break;
+      input[type="number"] {
+        appearance: textfield;
+        -moz-appearance: textfield;
       }
-      let lines = '';
-      let groupSum = 0;
-      for (let denom of pecahan.filter(d => usedInGroup[d])) {
-        let count = usedInGroup[denom];
-        let subtotal = denom * count;
-        groupSum += subtotal;
-        lines += `<div class="denom-line"><span>Rp ${denom.toLocaleString("id-ID")} × ${count}</span><span> = Rp ${subtotal.toLocaleString("id-ID")}</span></div>`;
-      }
-      let chunkLabel = (currentChunk === 100000) ? `100rb ke-${groupIndex}` : `Blok ${groupIndex} (Rp ${currentChunk.toLocaleString("id-ID")})`;
-      groupsHTML += `
-        <div class="modal-breakdown-group">
-          <div class="group-title">📌 ${chunkLabel}</div>
-          ${lines}
-          <div class="group-total"><strong>Total:</strong> Rp ${groupSum.toLocaleString("id-ID")}</div>
-        </div>
-      `;
-      remainingTarget -= currentChunk;
-      groupIndex++;
-    }
-    return groupsHTML;
-  }
 
-  function hitungPemisahanModal() {
-    const target = parseInt(document.getElementById("targetModal").value) || 0;
-    if (target <= 0) return fireCyberAlert({icon:'error', text:'Target modal harus diisi'});
-    let fisik = {}, totalFisik = 0;
-    pecahan.forEach(n => {
-      fisik[n] = parseInt(document.getElementById(`fisik_${n}`).value) || 0;
-      totalFisik += n * fisik[n];
-    });
-    if (totalFisik < target) return fireCyberAlert({icon:'error', text:`Total fisik uang di laci (${formatRp(totalFisik)}) kurang dari target modal.`});
-    
-    let setorTotal = totalFisik - target;
-    let sisaSetor = setorTotal;
-    let setorRinci = {};
-    let modalRinci = {...fisik}; 
-    
-    for (let n of pecahan) {
-      let ambil = 0;
-      while (sisaSetor >= n && modalRinci[n] > 0) {
-        sisaSetor -= n;
-        modalRinci[n]--;
-        ambil++;
+      /* Breakdown Style */
+      .modal-breakdown-group {
+        background: rgba(245, 158, 11, 0.04);
+        border-left: 4px solid #f59e0b;
+        padding: 14px 18px;
+        margin-bottom: 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #f59e0b;
       }
-      if (ambil > 0) setorRinci[n] = ambil;
-      if (sisaSetor === 0) break;
-    }
-    if (sisaSetor > 0) return fireCyberAlert({icon:'warning', text:'Pecahan laci tidak mendukung pemisahan tepat secara sistem. Mohon sesuaikan pecahan manual.'});
-    
-    let totalModal = 0;
-    for (let n of pecahan) totalModal += n * (modalRinci[n] || 0);
-    if (totalModal !== target) return fireCyberAlert({icon:'error', text:'Kesalahan internal sistem: Total penyesuaian modal gagal sinkron.'});
-    
-    const modalBreakdownHTML = buildModalBreakdownHTML(modalRinci, target);
-    
-    let setorHTML = '';
-    if (setorTotal > 0) {
-      setorHTML = `<div style="margin-top:20px;"><h3 style="font-weight:700; color:#fbbf24; font-size:15px; margin-bottom:10px;"><i class="fa-solid fa-hand-holding-usd"></i> Setoran Bersih ke Pemilik (${formatRp(setorTotal)})</h3>`;
-      for (let n of pecahan) {
-        if (setorRinci[n]) {
-          setorHTML += `<div style="font-size:14px; margin:4px 0; color:#e2e8f0;">⚡ Rp ${n.toLocaleString("id-ID")} : <b>${setorRinci[n]}</b> lembar/keping</div>`;
-        }
+      .group-title {
+        font-weight: 700;
+        color: #fbbf24;
+        font-size: 1.05rem;
+        margin-bottom: 10px;
+        border-bottom: 1px dashed rgba(251, 191, 36, 0.2);
+        padding-bottom: 4px;
+        display: inline-block;
       }
-      setorHTML += `</div>`;
-    } else {
-      setorHTML = `<div style="margin-top:20px; background:rgba(16,185,129,0.15); padding:12px; border-radius:14px; color:#34d399;"><i class="fa-solid fa-check-circle"></i> Tidak ada setoran, seluruh kas dialokasikan untuk modal kerja besok.</div>`;
-    }
-    
-    fireCyberAlert({
-      title: `💼 Pembagian Modal Besok (${formatRp(target)})`,
-      html: `
-        <div class="swal-scroll">
-          <div style="background:rgba(99,102,241,0.15); border: 1px dashed rgba(99,102,241,0.4); padding:12px 16px; border-radius:16px; margin-bottom:20px; color:#a5b4fc;">
-            <i class="fa-solid fa-chart-simple"></i> <strong>Rincian Per Blok Rp100.000</strong>
+      .denom-line {
+        font-family: monospace;
+        font-size: 15px;
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        color: #e2e8f0;
+      }
+      .group-total {
+        margin-top: 10px;
+        font-weight: 700;
+        color: white;
+        background: rgba(245, 158, 11, 0.2);
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 24px;
+        font-size: 13px;
+      }
+
+      .swal-scroll { max-height: 65vh; overflow-y: auto; padding-right: 8px; text-align: left; }
+      .swal2-popup.cyber-swal { background: #0b0f19 !important; border: 1px solid rgba(139, 92, 246, 0.3) !important; color: white !important; border-radius: 24px !important; }
+      .swal2-title { color: white !important; }
+      hr { margin: 20px 0; border: none; border-top: 1px solid var(--border); }
+
+      /* Animations Keyframes */
+      @keyframes blobFloat {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(40px, -30px); }
+      }
+      @keyframes particleFloat {
+        from { transform: translateY(100vh); opacity: 0; }
+        to { transform: translateY(-10vh); opacity: 1; }
+      }
+
+      @media (max-width: 1024px) {
+        .sidebar { width: 90px; padding: 30px 15px; }
+        .sidebar h2 span, .sidebar li span { display: none; }
+        .sidebar li { justify-content: center; padding: 15px; }
+        .content { margin-left: 90px; max-width: calc(100% - 90px); padding: 30px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cyber-grid"></div>
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+
+    <div class="particles">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="cursor-glow" id="glow"></div>
+
+    <div class="sidebar">
+      <h2>
+        <i class="fa-solid fa-bolt"></i>
+        <span>nandadotcss</span>
+      </h2>
+      <ul>
+        <li class="active" data-page="dashboard">
+          <i class="fa-solid fa-chart-line"></i> <span>Dashboard</span>
+        </li>
+        <li data-page="transaksi">
+          <i class="fa-solid fa-cart-shopping"></i> <span>Transaksi</span>
+        </li>
+        <li data-page="hitungpenjualan">
+          <i class="fa-solid fa-calculator"></i> <span>Hitung Penjualan</span>
+        </li>
+        <li data-page="stokbarang">
+          <i class="fa-solid fa-boxes-stacked"></i> <span>Stok Barang</span>
+        </li>
+        <li data-page="tutupkasir">
+          <i class="fa-solid fa-scale-balanced"></i> <span>Tutup Kasir</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <!-- DASHBOARD PAGE -->
+      <div id="dashboard" class="page active-page">
+        <h1 class="header-title animate-fade">Dashboard</h1>
+        <div class="stats-grid animate-fade">
+          <div class="stat-card">
+            <div class="icon icon-blue"><i class="fa-solid fa-cash-register"></i></div>
+            <div class="info">
+              <p>Total Kas Laci</p>
+              <h3 id="statKas">Rp 0</h3>
+            </div>
           </div>
-          ${modalBreakdownHTML}
-          <hr />
-          ${setorHTML}
+          <div class="stat-card">
+            <div class="icon icon-green"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div class="info">
+              <p>Total Penjualan Shift</p>
+              <h3 id="statPenjualan">Rp 0</h3>
+            </div>
+          </div>
         </div>
-      `,
-      width: 600,
-      confirmButtonText: 'Selesai & Konfirmasi'
-    });
-  }
+        <div class="card animate-fade">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-vault"></i> Rincian Isi Laci</h2>
+          </div>
+          <div class="stock-grid" id="drawerStock"></div>
+        </div>
+      </div>
 
-  // STOK BARANG
-  function tambahBarang() {
-    const nama = document.getElementById("namaBarang").value.trim();
-    const kode = document.getElementById("kodeBarang").value.trim();
-    const jumlah = parseInt(document.getElementById("jumlahBarang").value) || 0;
-    const lokasi = document.getElementById("lokasiBarang").value.trim();
-    if (!nama || !kode || jumlah <=0 || !lokasi) return fireCyberAlert({icon:'error', text:'Semua field wajib diisi secara valid.'});
-    const existing = dataStokBarang.findIndex(b => b.kode === kode);
-    if (existing !== -1) {
-      dataStokBarang[existing].jumlah += jumlah;
-      dataStokBarang[existing].lokasi = lokasi;
-    } else {
-      dataStokBarang.push({ nama, kode, jumlah, lokasi });
-    }
-    document.getElementById("namaBarang").value = '';
-    document.getElementById("kodeBarang").value = '';
-    document.getElementById("jumlahBarang").value = 1;
-    document.getElementById("lokasiBarang").value = '';
-    tampilkanStokBarang();
-    fireCyberAlert({icon:'success', title:'Stok Berhasil Diperbarui!'});
-  }
+      <!-- TRANSAKSI PAGE -->
+      <div id="transaksi" class="page">
+        <h1 class="header-title animate-fade">🧾 Transaksi Pelanggan</h1>
+        <div class="card animate-fade">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-bag-shopping"></i> Proses Pembayaran</h2>
+          </div>
+          <div class="input-group main-input" style="margin-bottom: 30px; max-width: 350px">
+            <label>Total Belanja (Rp)</label>
+            <input type="text" id="totalBelanja" placeholder="0" autocomplete="off" oninput="formatRupiahInput(this)" />
+          </div>
+          <h3 style="font-size: 15px; margin-bottom: 20px; color: #a5b4fc">
+            <i class="fa-regular fa-money-bill-1"></i> Uang Diterima (Jumlah Lembar/Koin)
+          </h3>
+          <div class="grid" id="bayarInputs"></div>
+          <div class="btn-group">
+            <button class="btn-primary" onclick="prosesPembayaran()">
+              <i class="fa-solid fa-check-circle"></i> Bayar & Ambil Kembalian
+            </button>
+            <button class="btn-outline" onclick="resetFormTransaksi()">Reset</button>
+          </div>
+        </div>
+      </div>
 
-  function tampilkanStokBarang() {
-    const search = document.getElementById("searchStok")?.value.toLowerCase() || '';
-    const filtered = dataStokBarang.filter(b => b.nama.toLowerCase().includes(search) || b.kode.toLowerCase().includes(search) || b.lokasi.toLowerCase().includes(search));
-    const tbody = document.querySelector("#tabelStok tbody");
-    tbody.innerHTML = '';
-    filtered.forEach(b => {
-      tbody.innerHTML += `<tr><td><b style="color:white;">${b.nama}</b></td><td><span class="badge">${b.kode}</span></td><td>${b.jumlah}</td><td>${b.lokasi}</td><td><button class="btn-outline magnetic" style="padding:6px 14px; border-color:#ef4444; color:#fca5a5;" onclick="hapusBarang('${b.kode}')"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-    });
-    if (filtered.length === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--gray);">Tidak ada data inventaris ditemukan.</td></tr>';
-    initMagneticButtons();
-  }
+      <!-- HITUNG PENJUALAN PAGE -->
+      <div id="hitungpenjualan" class="page">
+        <h1 class="header-title animate-fade">📊 Hitung Uang Penjualan</h1>
+        <div class="card animate-fade">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-receipt"></i> Input Fisik Uang di Laci</h2>
+          </div>
+          <p style="font-size: 14px; color: var(--gray); margin-bottom: 20px">
+            Hitung jumlah lembar/keping uang yang ada di laci saat ini untuk mengetahui total penjualan bersih.
+          </p>
+          <div class="input-group main-input" style="margin-bottom: 30px; max-width: 350px">
+            <label>Modal Awal Hari Ini (Rp)</label>
+            <input type="text" id="modalAwalHarian" placeholder="Contoh: 150.000" oninput="formatRupiahInput(this)" />
+          </div>
+          <h3 style="font-size: 15px; margin-bottom: 20px; color: #a5b4fc; font-weight: 600;">
+            <i class="fa-solid fa-boxes-stacked"></i> Hitung Fisik Uang di Laci Sekarang:
+          </h3>
+          <div class="grid" id="fisikPenjualanInputs"></div>
+          <div class="btn-group">
+            <button class="btn-primary" onclick="hitungPenjualanBersih()"><i class="fa-solid fa-calculator"></i> Hitung Penjualan</button>
+            <button class="btn-outline" onclick="resetFormHitungPenjualan()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          </div>
+          <div id="hasilBox" class="result-box" style="display: none">
+            <div class="result-item">
+              <p><i class="fa-solid fa-wallet"></i> Total Uang Fisik</p>
+              <h3 id="totalFisikDisplay">Rp 0</h3>
+            </div>
+            <div class="result-item">
+              <p><i class="fa-solid fa-arrow-down"></i> Modal Awal</p>
+              <h3 id="modalDisplay">Rp 0</h3>
+            </div>
+            <div class="result-item" style="border-left: 3px solid var(--success); padding-left: 25px">
+              <p><i class="fa-solid fa-chart-line"></i> Estimasi Penjualan Bersih</p>
+              <h3 id="penjualanBersihDisplay" style="color: var(--success)">Rp 0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  function hapusBarang(kode) {
-    fireCyberAlert({
-      title: 'Hapus Barang?',
-      text: 'Data barang akan dihapus permanen dari sistem stok harian.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Ya, Hapus',
-      cancelButtonText: 'Batal'
-    }).then(res => {
-      if (res.isConfirmed) { 
-        dataStokBarang = dataStokBarang.filter(b => b.kode !== kode); 
-        tampilkanStokBarang(); 
+      <!-- MANAJEMEN STOK PAGE -->
+      <div id="stokbarang" class="page">
+        <h1 class="header-title animate-fade">📦 Manajemen Stok Barang</h1>
+        <div class="card animate-fade">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-list-check"></i> Daftar Stok Barang</h2>
+          </div>
+          <div class="search-box">
+            <input type="text" id="searchStok" placeholder="🔍 Cari berdasarkan nama atau kode..." oninput="tampilkanStokBarang()" />
+            <button class="btn-success" onclick="exportToExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+          </div>
+          <div class="table-container">
+            <table id="tabelStok">
+              <thead>
+                <tr>
+                  <th>Barang</th>
+                  <th>Kode</th>
+                  <th>Jumlah</th>
+                  <th>Lokasi</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="stok-form-container">
+            <h3 style="margin-bottom: 20px; color: white"><i class="fa-solid fa-plus-circle"></i> Tambah / Update Stok</h3>
+            <div class="grid">
+              <div class="input-group">
+                <label>Nama Barang</label><input type="text" id="namaBarang" placeholder="Indomie Goreng" />
+              </div>
+              <div class="input-group">
+                <label>Kode Barang</label><input type="text" id="kodeBarang" placeholder="IG001" />
+              </div>
+              <div class="input-group">
+                <label>Jumlah</label><input type="number" id="jumlahBarang" value="1" min="0" />
+              </div>
+              <div class="input-group">
+                <label>Lokasi Simpan</label><input type="text" id="lokasiBarang" placeholder="Rak A1" />
+              </div>
+            </div>
+            <button class="btn-success" style="margin-top: 20px" onclick="tambahBarang()"><i class="fa-solid fa-save"></i> Simpan ke Stok</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TUTUP KASIR PAGE -->
+      <div id="tutupkasir" class="page">
+        <h1 class="header-title animate-fade">🔐 Tutup Shift & Pisah Modal</h1>
+        <div class="card card-special animate-fade">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-scale-balanced"></i> Rekap & Pisah Modal</h2>
+          </div>
+          <div class="input-group main-input" style="margin-bottom: 30px; max-width: 350px">
+            <label>Target Modal Besok (Rp)</label>
+            <input type="text" id="targetModal" placeholder="150.000" oninput="formatRupiahInput(this)" />
+          </div>
+          <h3 style="font-size: 15px; margin-bottom: 20px; color: var(--warning)">Fisik Uang di Laci Saat Ini (Jumlah Lembar/Koin):</h3>
+          <div class="grid" id="fisikInputs"></div>
+          <div class="btn-group">
+            <button class="btn-warning" onclick="hitungPemisahanModal()"><i class="fa-solid fa-wand-magic-sparkles"></i> Pisahkan</button>
+            <button class="btn-outline" onclick="resetFormTutupKasir()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const pecahan = [100000, 50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100];
+      
+      // Load initial storage or templates
+      let stokUang = JSON.parse(localStorage.getItem('stokUang')) || {};
+      let stats = JSON.parse(localStorage.getItem('statsKasir')) || { totalPenjualan: 0 };
+      let dataStokBarang = JSON.parse(localStorage.getItem('dataStokBarang')) || [];
+
+      // Initialize empty nominal values if none exists
+      pecahan.forEach(p => { if (stokUang[p] === undefined) stokUang[p] = 0; });
+
+      const formatRp = (angka) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(angka);
+      const parseRpValue = (valStr) => parseInt(valStr.replace(/\D/g, "")) || 0;
+
+      function formatRupiahInput(input) {
+        let numStr = input.value.replace(/\D/g, "");
+        input.value = numStr ? new Intl.NumberFormat("id-ID").format(numStr) : "";
       }
-    });
+
+      const fireCyberAlert = (options) => {
+        return Swal.fire({
+          ...options,
+          background: "#0b0f19",
+          color: "#ffffff",
+          confirmButtonColor: "#6366f1",
+          cancelButtonColor: "#ef4444",
+          customClass: { popup: "cyber-swal" },
+        });
+      };
+
+      // Mouse glow element logic
+      const glow = document.getElementById("glow");
+      document.addEventListener("mousemove", (e) => {
+        glow.style.left = e.clientX + "px";
+        glow.style.top = e.clientY + "px";
+      });
+
+      // Navigation Core logic
+      document.querySelectorAll(".sidebar li").forEach((li) => {
+        li.addEventListener("click", function () {
+          document.querySelectorAll(".sidebar li").forEach((l) => l.classList.remove("active"));
+          this.classList.add("active");
+          
+          let targetPage = this.getAttribute("data-page");
+          document.querySelectorAll(".page").forEach((p) => p.classList.remove("active-page"));
+          document.getElementById(targetPage).classList.add("active-page");
+          
+          if(targetPage === 'dashboard') updateDashboard();
+          if(targetPage === 'stokbarang') tampilkanStokBarang();
+        });
+      });
+
+      function initPecahanInputs() {
+        const bayarInputs = document.getElementById("bayarInputs");
+        const fisikInputs = document.getElementById("fisikInputs");
+        const fisikPenjualanInputs = document.getElementById("fisikPenjualanInputs");
+
+        bayarInputs.innerHTML = "";
+        fisikInputs.innerHTML = "";
+        fisikPenjualanInputs.innerHTML = "";
+
+        pecahan.forEach((nominal) => {
+          let icon = nominal >= 1000 ? '<i class="fa-regular fa-money-bill-1"></i>' : '<i class="fa-solid fa-coins"></i>';
+          let formLabel = `${icon} Rp ${nominal.toLocaleString("id-ID")}`;
+          
+          bayarInputs.innerHTML += `<div class="input-group"><label>${formLabel}</label><input type="number" min="0" id="bayar_${nominal}" value="0" onfocus="this.select()"></div>`;
+          fisikInputs.innerHTML += `<div class="input-group"><label>${formLabel}</label><input type="number" min="0" id="fisik_${nominal}" value="0" onfocus="this.select()"></div>`;
+          fisikPenjualanInputs.innerHTML += `<div class="input-group"><label>${formLabel}</label><input type="number" min="0" id="fisikJual_${nominal}" value="0" onfocus="this.select()"></div>`;
+        });
+        updateDashboard();
+      }
+
+      function updateDashboard() {
+        let totalKas = 0;
+        const drawerStock = document.getElementById("drawerStock");
+        drawerStock.innerHTML = "";
+        
+        pecahan.forEach((nominal) => {
+          let currentCount = stokUang[nominal] || 0;
+          totalKas += nominal * currentCount;
+          drawerStock.innerHTML += `<div class="stock-item"><h4>Rp ${nominal.toLocaleString("id-ID")}</h4><p>${currentCount} <span>x</span></p></div>`;
+        });
+        
+        document.getElementById("statKas").innerText = formatRp(totalKas);
+        document.getElementById("statPenjualan").innerText = formatRp(stats.totalPenjualan);
+        
+        localStorage.setItem('stokUang', JSON.stringify(stokUang));
+        localStorage.setItem('statsKasir', JSON.stringify(stats));
+      }
+
+      function prosesPembayaran() {
+        const totalBelanja = parseRpValue(document.getElementById("totalBelanja").value);
+        if (totalBelanja <= 0) {
+          return fireCyberAlert({ icon: "error", title: "Oops", text: "Total belanja valid wajib diisi!" });
+        }
+
+        let totalBayar = 0;
+        let tempStok = { ...stokUang };
+
+        pecahan.forEach((n) => {
+          const jml = parseInt(document.getElementById(`bayar_${n}`).value) || 0;
+          totalBayar += n * jml;
+          tempStok[n] += jml;
+        });
+
+        if (totalBayar < totalBelanja) {
+          return fireCyberAlert({ icon: "warning", title: "Uang Kurang", text: `Uang dibayarkan kurang ${formatRp(totalBelanja - totalBayar)}` });
+        }
+
+        let kembalian = totalBayar - totalBelanja;
+        let sisaKembalian = kembalian;
+        let rincianKembalian = {};
+
+        // Greedy matching algorithm for change
+        for (let n of pecahan) {
+          if (sisaKembalian >= n) {
+            let lembarDibutuhkan = Math.floor(sisaKembalian / n);
+            let lembarTersedia = tempStok[n];
+            let diambil = Math.min(lembarDibutuhkan, lembarTersedia);
+
+            if (diambil > 0) {
+              sisaKembalian -= n * diambil;
+              tempStok[n] -= diambil;
+              rincianKembalian[n] = diambil;
+            }
+          }
+        }
+
+        if (sisaKembalian > 0) {
+          return fireCyberAlert({
+            icon: "error",
+            title: "Gagal Transaksi",
+            text: "Uang kembalian di laci tidak cukup atau tidak ada pecahan yang cocok!",
+          });
+        }
+
+        // Apply changes to layout & local storage
+        stokUang = tempStok;
+        stats.totalPenjualan += totalBelanja;
+        updateDashboard();
+
+        // Build elegant html report for swal alert
+        let htmlRincian = `<div class="swal-scroll">`;
+        if (kembalian === 0) {
+          htmlRincian += `<p style="text-align:center;">Uang pas! Tidak ada kembalian.</p>`;
+        } else {
+          htmlRincian += `<p style="margin-bottom:10px;">Rincian kembalian total <b>${formatRp(kembalian)}</b>:</p>`;
+          for (let prc in rincianKembalian) {
+            htmlRincian += `<div class="denom-line"><span>Rp ${parseInt(prc).toLocaleString('id-ID')}</span> <span>x ${rincianKembalian[prc]} lembar/koin</span></div>`;
+          }
+        }
+        htmlRincian += `</div>`;
+
+        fireCyberAlert({
+          icon: "success",
+          title: "Pembayaran Sukses!",
+          html: htmlRincian,
+        });
+
+        resetFormTransaksi();
+      }
+
+      function hitungPenjualanBersih() {
+        const modalAwal = parseRpValue(document.getElementById("modalAwalHarian").value);
+        let totalFisik = 0;
+
+        pecahan.forEach((n) => {
+          const jml = parseInt(document.getElementById(`fisikJual_${n}`).value) || 0;
+          totalFisik += n * jml;
+        });
+
+        let penjualanBersih = totalFisik - modalAwal;
+
+        document.getElementById("totalFisikDisplay").innerText = formatRp(totalFisik);
+        document.getElementById("modalDisplay").innerText = formatRp(modalAwal);
+        
+        let bersihEl = document.getElementById("penjualanBersihDisplay");
+        bersihEl.innerText = formatRp(penjualanBersih);
+        
+        if (penjualanBersih < 0) {
+          bersihEl.style.color = "var(--danger)";
+        } else {
+          bersihEl.style.color = "var(--success)";
+        }
+
+        document.getElementById("hasilBox").style.display = "flex";
+      }
+
+      function hitungPemisahanModal() {
+  const targetModal = parseRpValue(document.getElementById("targetModal").value);
+  if (targetModal <= 0) {
+    return fireCyberAlert({ icon: "error", title: "Gagal", text: "Target modal besok wajib ditentukan!" });
   }
 
-  function resetInputs(containerId) {
-    document.querySelectorAll(`#${containerId} input`).forEach(i => i.value = 0);
-  }
+  let fisikLaci = {};
+  let totalFisik = 0;
 
-  // INTERACTIVE CURSOR GLOW
-  const glow = document.querySelector(".cursor-glow");
-  document.addEventListener("mousemove", (e) => {
-    glow.style.left = e.clientX + "px";
-    glow.style.top = e.clientY + "px";
+  pecahan.forEach((n) => {
+    const count = parseInt(document.getElementById(`fisik_${n}`).value) || 0;
+    fisikLaci[n] = count;
+    totalFisik += n * count;
   });
 
-  // INTERACTIVE MAGNETIC BUTTONS
-  function initMagneticButtons() {
-    document.querySelectorAll(".magnetic").forEach(btn => {
-      btn.addEventListener("mousemove", e => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * .18}px, ${y * .18}px)`;
-      });
-      btn.addEventListener("mouseleave", () => {
-        btn.style.transform = "translate(0,0)";
-      });
-    });
-  }
-
-  // NAVIGASI HALAMAN
-  document.querySelectorAll('.sidebar li').forEach(li => {
-    li.addEventListener('click', () => {
-      document.querySelectorAll('.sidebar li').forEach(l => l.classList.remove('active'));
-      li.classList.add('active');
-      const pageId = li.dataset.page;
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-      document.getElementById(pageId).classList.add('active-page');
-      if (pageId === 'stokbarang') tampilkanStokBarang();
-    });
-  });
-
- async function exportToExcel() {
-  if (dataStokBarang.length === 0) {
+  if (totalFisik < targetModal) {
     return fireCyberAlert({
-      icon: 'warning',
-      title: 'Data Kosong',
-      text: 'Belum ada data stok.'
+      icon: "error",
+      title: "Fisik Kurang",
+      text: `Total fisik uang di laci (${formatRp(totalFisik)}) tidak mencukupi target modal (${formatRp(targetModal)})`,
     });
   }
 
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Stok Barang");
+  let sisaTargetModal = targetModal;
+  let laciModalBesok = {};
+  let laciSetoranBuku = {};
 
-  // HEADER
-  worksheet.columns = [
-    { header: "No", key: "no", width: 10 },
-    { header: "Nama Barang", key: "nama", width: 30 },
-    { header: "Kode Barang", key: "kode", width: 25 },
-    { header: "Jumlah", key: "jumlah", width: 15 },
-    { header: "Lokasi", key: "lokasi", width: 20 }
-  ];
-
-  // STYLE HEADER
-  worksheet.getRow(1).eachCell(cell => {
-    cell.font = {
-      bold: true,
-      color: { argb: "FFFFFFFF" },
-      size: 12
-    };
-
-    cell.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: "6366F1" }
-    };
-
-    cell.alignment = {
-      vertical: 'middle',
-      horizontal: 'center'
-    };
-
-    cell.border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    };
+  // Inisialisasi awal laci
+  pecahan.forEach((n) => {
+    laciModalBesok[n] = 0;
+    laciSetoranBuku[n] = 0;
   });
 
-  // DATA
-  dataStokBarang.forEach((item, index) => {
-    const row = worksheet.addRow({
-      no: index + 1,
-      nama: item.nama,
-      kode: item.kode,
-      jumlah: item.jumlah,
-      lokasi: item.lokasi
-    });
+  // STRATEGI: Balik urutan pecahan agar mengutamakan uang kecil terlebih dahulu untuk modal besok
+  const pecahanDariKecil = [...pecahan].reverse();
 
-    // Zebra style
-    row.eachCell(cell => {
-      cell.border = {
-        top: { style: 'thin', color: { argb: '444444' } },
-        left: { style: 'thin', color: { argb: '444444' } },
-        bottom: { style: 'thin', color: { argb: '444444' } },
-        right: { style: 'thin', color: { argb: '444444' } }
-      };
-
-      cell.alignment = {
-        vertical: 'middle',
-        horizontal: 'center'
-      };
-
-      if (index % 2 === 0) {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: '1E293B' }
-        };
-      }
-    });
+  pecahanDariKecil.forEach((n) => {
+    if (sisaTargetModal >= n && fisikLaci[n] > 0) {
+      let butuh = Math.floor(sisaTargetModal / n);
+      let ambil = Math.min(butuh, fisikLaci[n]);
+      
+      laciModalBesok[n] = ambil;
+      fisikLaci[n] -= ambil;
+      sisaTargetModal -= n * ambil;
+    }
   });
 
-  // Freeze Header
-  worksheet.views = [
-    { state: 'frozen', ySplit: 1 }
-  ];
+  // Sisa uang yang tidak terserap modal laci (termasuk uang-uang besar) otomatis masuk ke Setoran Omset
+  pecahan.forEach((n) => {
+    laciSetoranBuku[n] = fisikLaci[n];
+  });
 
-  // Filter
-  worksheet.autoFilter = {
-    from: 'A1',
-    to: 'E1'
-  };
+  let totalModalBesokDidapat = targetModal - sisaTargetModal;
+  let totalSetorOmset = totalFisik - totalModalBesokDidapat;
 
-  // Generate file
-  const buffer = await workbook.xlsx.writeBuffer();
+  // Sinkronisasi data ke penyimpanan lokal (Laci Besok otomatis terisi uang kecil)
+  pecahan.forEach(n => { stokUang[n] = laciModalBesok[n]; });
+  stats.totalPenjualan = 0; // Reset sesi shift
+  updateDashboard();
 
-  saveAs(
-    new Blob([buffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    }),
-    `stok_barang_${new Date().toISOString().split('T')[0]}.xlsx`
-  );
+  // Tampilan Report Popup
+  let swalContent = `
+    <div class="swal-scroll">
+      <div class="modal-breakdown-group">
+        <span class="group-title">💵 MODAL LACI BESOK (Diutamakan Uang Kecil: ${formatRp(totalModalBesokDidapat)})</span>
+  `;
+  pecahan.forEach((n) => {
+    if (laciModalBesok[n] > 0) swalContent += `<div class="denom-line"><span>Rp ${n.toLocaleString('id-ID')}</span> <span>x ${laciModalBesok[n]}</span></div>`;
+  });
+  if(sisaTargetModal > 0) {
+    swalContent += `<p style="color:var(--warning);font-size:12px;margin-top:5px;">Peringatan: Uang di laci habis sebelum target modal terpenuhi. Kurang ${formatRp(sisaTargetModal)}.</p>`;
+  }
+  
+  swalContent += `</div><div class="modal-breakdown-group" style="border-left-color:var(--success);">
+      <span class="group-title" style="color:#10b981;">💰 SETORAN OMSET / PROFIT (${formatRp(totalSetorOmset)})</span>`;
+      
+  pecahan.forEach((n) => {
+    if (laciSetoranBuku[n] > 0) swalContent += `<div class="denom-line"><span>Rp ${n.toLocaleString('id-ID')}</span> <span>x ${laciSetoranBuku[n]}</span></div>`;
+  });
+  swalContent += `</div></div>`;
 
   fireCyberAlert({
-    icon: 'success',
-    title: 'Export Berhasil',
-    text: 'Excel dengan styling berhasil dibuat.'
+    icon: "success",
+    title: "Kas Shift Berhasil Ditutup!",
+    html: swalContent,
   });
+
+  resetFormTutupKasir();
 }
 
-  // INITIALIZATION
-  initPecahanInputs();
-  tampilkanStokBarang();
-</script>
-</body>
+      // Stock management core mechanics
+      function tampilkanStokBarang() {
+        const query = document.getElementById("searchStok").value.toLowerCase();
+        const tbody = document.querySelector("#tabelStok tbody");
+        tbody.innerHTML = "";
+
+        const filtered = dataStokBarang.filter(b => 
+          b.nama.toLowerCase().includes(query) || b.kode.toLowerCase().includes(query)
+        );
+
+        if(filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Tidak ada stok barang ditemukan.</td></tr>`;
+          return;
+        }
+
+        filtered.forEach((b, index) => {
+          tbody.innerHTML += `
+            <tr>
+              <td><b>${b.nama}</b></td>
+              <td><span class="badge">${b.kode}</span></td>
+              <td>${b.jumlah} Pcs</td>
+              <td><i class="fa-solid fa-location-dot"></i> ${b.lokasi || '-'}</td>
+              <td>
+                <button class="btn-outline" style="padding:6px 12px; font-size:12px; display:inline-flex;" onclick="hapusBarang(${index})">
+                  <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      function tambahBarang() {
+        const nama = document.getElementById("namaBarang").value.trim();
+        const kode = document.getElementById("kodeBarang").value.trim().toUpperCase();
+        const jumlah = parseInt(document.getElementById("jumlahBarang").value) || 0;
+        const lokasi = document.getElementById("lokasiBarang").value.trim();
+
+        if (!nama || !kode) {
+          return fireCyberAlert({ icon: "error", title: "Gagal", text: "Nama dan Kode Barang tidak boleh kosong!" });
+        }
+
+        // Check matching product arrays
+        const existingIndex = dataStokBarang.findIndex(b => b.kode === kode);
+        if (existingIndex > -1) {
+          dataStokBarang[existingIndex].jumlah += jumlah;
+          dataStokBarang[existingIndex].nama = nama; // Update standard names if changed
+          dataStokBarang[existingIndex].lokasi = lokasi;
+        } else {
+          dataStokBarang.push({ nama, kode, jumlah, lokasi });
+        }
+
+        localStorage.setItem('dataStokBarang', JSON.stringify(dataStokBarang));
+        fireCyberAlert({ icon: "success", title: "Berhasil", text: "Data stok produk berhasil disimpan!" });
+        
+        // Reset dynamic field values
+        document.getElementById("namaBarang").value = "";
+        document.getElementById("kodeBarang").value = "";
+        document.getElementById("jumlahBarang").value = "1";
+        document.getElementById("lokasiBarang").value = "";
+        
+        tampilkanStokBarang();
+      }
+
+      function hapusBarang(index) {
+        Swal.fire({
+          title: "Apakah Anda yakin?",
+          text: "Data stok produk ini akan dihapus permanen!",
+          icon: "warning",
+          showCancelButton: true,
+          background: "#0b0f19",
+          color: "#ffffff",
+          confirmButtonColor: "#ef4444",
+          cancelButtonColor: "#6366f1",
+          confirmButtonText: "Ya, Hapus!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            dataStokBarang.splice(index, 1);
+            localStorage.setItem('dataStokBarang', JSON.stringify(dataStokBarang));
+            tampilkanStokBarang();
+          }
+        });
+      }
+
+      async function exportToExcel() {
+        if(dataStokBarang.length === 0) {
+          return fireCyberAlert({ icon: "warning", title: "Kosong", text: "Tidak ada data stok yang bisa diexport." });
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Stok Barang');
+
+        worksheet.columns = [
+          { header: 'Nama Barang', key: 'nama', width: 30 },
+          { header: 'Kode Barang', key: 'kode', width: 15 },
+          { header: 'Jumlah (Stok)', key: 'jumlah', width: 15 },
+          { header: 'Lokasi Simpan', key: 'lokasi', width: 20 }
+        ];
+
+        dataStokBarang.forEach(b => worksheet.addRow(b));
+
+        // Format styling cells logic 
+        worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+        worksheet.getRow(1).background = { type: 'pattern', pattern:'solid', fgColor:{ argb:'6366F1' } };
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        saveAs(new Blob([buffer]), `Stok_Barang_${new Date().toISOString().slice(0,10)}.xlsx`);
+      }
+
+      // Global helper reset methods
+      function resetFormTransaksi() {
+        document.getElementById('totalBelanja').value = '';
+        pecahan.forEach(n => { document.getElementById(`bayar_${n}`).value = '0'; });
+      }
+
+      function resetFormHitungPenjualan() {
+        document.getElementById('modalAwalHarian').value = '';
+        pecahan.forEach(n => { document.getElementById(`fisikJual_${n}`).value = '0'; });
+        document.getElementById('hasilBox').style.display = 'none';
+      }
+
+      function resetFormTutupKasir() {
+        document.getElementById('targetModal').value = '';
+        pecahan.forEach(n => { document.getElementById(`fisik_${n}`).value = '0'; });
+      }
+
+      // On window runtime lifecycle initiation triggers
+      window.onload = function() {
+        initPecahanInputs();
+      };
+    </script>
+  </body>
 </html>

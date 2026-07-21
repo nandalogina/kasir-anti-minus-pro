@@ -114,20 +114,12 @@ nav {
     left: 0;
     width: 100%;
     height: 120%; /* Untuk parallax scroll */
-    background-image: url('photo_6075365204976931404_w.jpg'); /* Foto Pake Udeng */
+    background-image: url('../images/photo_6075365204976931404_w.jpg'); /* Foto Pake Udeng */
     background-size: cover;
     background-position: center 20%;
     filter: grayscale(80%) brightness(35%);
     z-index: -2;
 }
-
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 60%, var(--bg-color));
-    z-index: -1;
-}
-
 .hero-title-wrapper {
     overflow: hidden;
 }
@@ -216,9 +208,9 @@ nav {
 }
 
 /* Injeksi File Gambar Asli */
-.img-it { background-image: url('photo_6075365204976931405_w.jpg'); } /* Foto Laptop UTS */
-.img-mekanik { background-image: url('photo_6075365204976931401_w.jpg'); } /* Foto Bongkar Gardan */
-.img-kucing { background-image: url('photo_6075365204976931403_w.jpg'); } /* Kucing */
+.img-it { background-image: url('../images/photo_6075365204976931405_w.jpg'); } /* Foto Laptop UTS */
+.img-mekanik { background-image: url('../images/photo_6075365204976931401_w.jpg'); } /* Foto Bongkar Gardan */
+.img-kucing { background-image: url('../images/photo_6075365204976931403_w.jpg'); } /* Kucing */
 
 .project-card:hover .project-img, .random-container:hover .img-kucing {
     filter: grayscale(0%) contrast(1);
