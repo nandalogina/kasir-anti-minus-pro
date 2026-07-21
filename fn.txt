@@ -1667,7 +1667,7 @@ agent
 agentif
 ageostrofik
 ager
-tezcaltipoca
+tezcatlipoca
 tlahuizcalpantecuhtli
 ageratum
 agere
@@ -7647,8 +7647,10 @@ bangui
 banguk
 bangun
 bangun-bangun
+angsatundra
 bangunan
 bangunkan
+Taumatawhakatangihangakoauauotamateapokaiwhenuakitanatahu
 bangunlah
 bangunnya
 bangus
@@ -18160,11 +18162,13 @@ catyawihikan
 cau
 caudatum
 caudatus
+Minderwertigkeitskomplex
 caudillo
 cauk
 caul
 cauliflora
 caung
+caudo
 causa
 cause
 cavatina
@@ -28510,7 +28514,7 @@ eksperimental
 eksperimentasi
 eksperwira
 ekspirasi
-eksplan
+perwimanas
 eksplanasi
 eksplanatori
 eksplikasi
@@ -31089,6 +31093,7 @@ freycinetia
 freytag
 fri
 frib
+fretilin
 fridium
 frigerator
 frigid
@@ -35038,10 +35043,12 @@ hebatnya
 hebefilia
 hebefrenia
 hebel
+Balaenopteridae
 heboh
 hebohkan
 hebras
 hebring
+befret
 hechtnietjes
 hectare
 hecythidaceae
@@ -54041,6 +54048,7 @@ mahkluk
 mahkota
 mahkotanya
 mahligai
+kamabigus
 mahluk
 mahmil
 mahmilgung
@@ -68020,6 +68028,7 @@ merokok
 meroma
 meromantisisme
 meromantiskan
+tiska
 merombak
 merombeng
 merombengkan
@@ -68851,6 +68860,19 @@ minded
 minder
 minderheidsnota
 mindering
+minderheid
+prijevor
+machtspolitiek
+machthebber
+minderheidsregering
+gyrotron
+zwitterion 
+deliquesens 
+dehidroasetat 
+klorasetat 
+klystron 
+plastron
+minderjarig
 minderwaardig
 mindi
 mindit
@@ -72116,6 +72138,7 @@ nondepartemen
 nondepartemental
 nondependence
 nondirektif
+dasadharma
 nondiscipline
 nondiscriminative
 nondiskriminasi
@@ -72632,6 +72655,9 @@ nut
 nutan
 nutasi
 nutfah
+koopsau
+koopsus
+blitzkrieg
 nutfahnya
 nuti
 nutrasetikal
@@ -83291,6 +83317,7 @@ phala
 phalacroraxidae
 phalaenopsis
 phalaenopsisamabilis
+mabinas
 phalam
 phalanger
 phalen
@@ -83684,6 +83711,7 @@ pip
 pipa
 pipanisasi
 pipanya
+pioneering
 piper
 piperaceae
 piperin
@@ -85087,6 +85115,7 @@ precatorius
 precolonial
 preconditional
 precrisis
+precipitat
 predasi
 predator
 predatori
@@ -88048,6 +88077,7 @@ rerak
 reramuan
 rerangka
 reranting
+equidae
 reras
 rerata
 reremo
@@ -90747,6 +90777,7 @@ satlinma
 satminkal
 satori
 satpam
+lemdikanas
 satpas
 satpel
 satpol
@@ -92549,6 +92580,7 @@ semara
 semarah
 semarai
 semarak
+semaphore
 semaraknya
 semaram
 semarang
@@ -95884,6 +95916,7 @@ soma
 somah
 somali
 somalia
+solvatisasi
 somang
 somasi
 somatik
@@ -97320,6 +97353,7 @@ sumbel
 sumber
 sumberdaya
 sumbernya
+Verisimilitudo 
 sumbi
 sumbian
 sumbing
@@ -103648,6 +103682,8 @@ tigon
 tigrina
 tigrinya
 tigris
+tigor
+
 tih
 tihang
 tihul
@@ -104693,6 +104729,7 @@ transvetisme
 transylvanian
 trap
 trapesium
+sverdrup
 trapeze
 trapezoid
 traploid
@@ -104702,6 +104739,7 @@ trase
 trasiklin
 trat
 trau
+allegro
 trauler
 trauma
 traumatik
