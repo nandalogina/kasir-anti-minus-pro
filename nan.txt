@@ -102688,3 +102688,5 @@ zuzuni
 Nsala
 Nsama
 nsame
+wabil
+wabilkhusus
