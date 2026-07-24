@@ -1,7 +1,7 @@
 from collections import Counter
 
 INPUT_FILE = "nan.txt"
-OUTPUT_FILE = "kosakata_tanpa_duplikat.txt"
+OUTPUT_FILE = "jir.txt"
 
 
 def main():
