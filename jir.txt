@@ -48,6 +48,26 @@ taintune
 acengkang
 eretan
 logis
+logisformal
+itikad
+itikaf
+itikurih
+olitik
+olitikum
+biatah
+biatlon
+tuhuk
+tuhur
+tuhurlau
+tuhutuhu
+atoni
+atonal
+atonia
+atonik
+atonemen
+asiri
+asiria
+asirang
 logika
 logisis
 logisme
@@ -57,7 +77,6 @@ logisisme
 logisitas
 logisistis
 logistikal
-logisformal
 eretisme
 nyalibit
 Almasih
@@ -5482,7 +5501,6 @@ asinkron
 asinkronus
 asintel
 asinyor
-asiri
 asis
 asisi
 asist
@@ -5815,8 +5833,6 @@ atomistis
 atomnya
 atomologi
 atomosofobia
-atonemen
-atoni
 ator
 atori
 atos
@@ -13545,8 +13561,6 @@ biasan
 biasanya
 biasis
 biat
-biatah
-biatlon
 biau
 biauritus
 biawak
@@ -35132,8 +35146,6 @@ itifak
 itifalofobia
 itihad
 itik
-itikad
-itikaf
 itil
 itinerari
 itisal
@@ -67590,8 +67602,6 @@ olisasi
 olisis
 olistium
 olit
-olitik
-olitikum
 oliva
 olivin
 olo
@@ -99494,7 +99504,6 @@ tuhfat
 tuhi
 tuhmah
 tuhu
-tuhur
 tui
 tuidi
 tuil
