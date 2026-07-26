@@ -47,6 +47,17 @@ taintena
 taintune
 acengkang
 eretan
+logis
+logika
+logisis
+logisme
+logisiti
+logistik
+logisisme
+logisitas
+logisistis
+logistikal
+logisformal
 eretisme
 nyalibit
 Almasih
@@ -48705,9 +48716,6 @@ logaritme
 logaritmik
 logat
 logawiah
-logika
-logis
-logistik
 logo
 logofili
 logofilia
